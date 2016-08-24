@@ -10,7 +10,7 @@ var FilesDemo = React.createClass({
   },
 
   onDrop: function (files) {
-    console.log(Array.isArray(files))
+    console.log(files)
     this.setState({
       files: files
     })
@@ -20,18 +20,20 @@ var FilesDemo = React.createClass({
     console.log('click')
   },
 
+  // {this.state.files.length > 0
+  //   ? <div>
+  //       <h2>Uploading {this.state.files.length} files...</h2>
+  //       <div>{this.state.files.map((file) => <img key={file.id} src={file.preview} />)}</div>
+  //     </div>
+  //   : null}
+
   render: function () {
     return (
       <div>
         <Files className="wow" onDrop={this.onDrop} onClick={this.onClick}>
           <div>Try dropping some files here, or click to select files.</div>
         </Files>
-        {this.state.files.length > 0
-          ? <div>
-              <h2>Uploading {this.state.files.length} files...</h2>
-              <div>{this.state.files.map((file) => <img src={file.preview} />)}</div>
-            </div>
-          : null}
+
       </div>
     )
   }
