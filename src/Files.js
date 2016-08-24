@@ -51,9 +51,9 @@ class Files extends React.Component {
       let file = filesAdded[i]
       file.id = 'files-list-item-' + this.id++
       file.preview = window.URL.createObjectURL(file)
-      files.push(file)
+      files.unshift(file)
     }
-    this.setState({ files: [...this.state.files, ...files] })
+    this.setState({ files: [...files, ...this.state.files] })
   }
 
   onDragOver(event) {
@@ -95,11 +95,13 @@ class Files extends React.Component {
         {this.props.children}
         {
           this.state.files.length > 0
-          ? <div>{this.state.files.map((file) =>
+          ? <div className="files-list">{this.state.files.map((file) =>
               <div className="files-list-item" key={file.id}>
-                <img className="files-list-item-preview" src={file.preview} />
-                <div>filename.png</div>
-                <div>100kB</div>
+                <div className="files-list-item-preview">
+                  <img className="files-list-item-preview-image" src={file.preview} />
+                </div>
+                <div>{file.name}</div>
+                <div>{file.size} bytes</div>
                 <img id={file.id} className="files-list-item-remove" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjxzdmcgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDQ4IDQ4IiB3aWR0aD0iNDgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTM4IDEyLjgzbC0yLjgzLTIuODMtMTEuMTcgMTEuMTctMTEuMTctMTEuMTctMi44MyAyLjgzIDExLjE3IDExLjE3LTExLjE3IDExLjE3IDIuODMgMi44MyAxMS4xNy0xMS4xNyAxMS4xNyAxMS4xNyAyLjgzLTIuODMtMTEuMTctMTEuMTd6Ii8+PHBhdGggZD0iTTAgMGg0OHY0OGgtNDh6IiBmaWxsPSJub25lIi8+PC9zdmc+" />
               </div>
             )}</div>
