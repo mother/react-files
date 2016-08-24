@@ -16,7 +16,15 @@ class Files extends React.Component {
   }
 
   onDrop(e) {
-    const files = e.dataTransfer ? e.dataTransfer.files : e.target.files
+    // Collect added files and cast pseudo-array to Array,
+    // then return to method
+    const filesAdded = e.dataTransfer ? e.dataTransfer.files : e.target.files
+    let files = []
+    for (let i = 0; i < filesAdded.length; i++) {
+      let file = filesAdded[i]
+      file.preview = window.URL.createObjectURL(file)
+      files.push(file)
+    }
     this.props.onDrop(files)
   }
 
