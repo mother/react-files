@@ -96,6 +96,14 @@ Be sure to style your Files component, available selectors are (view `style.css`
 npm test
 ```
 
+### Tinker
+
+```
+git clone https://github.com/mother/react-files
+npm install
+npm start
+```
+
 ### License
 
 MIT. Copyright (c) 2016 Jared Reich.
