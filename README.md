@@ -18,13 +18,17 @@ npm install react-files --save
 ## Usage
 
 ```js
+import React from 'react'
+import ReactDOM from 'react-dom'
+import Files from 'react-files'
+
 var FilesDemo = React.createClass({
   onSubmit: function(files) {
     console.log(files)
   },
 
-  onUnaccepted: function(file) {
-    console.log(file.name + ' is not a valid file type.')
+  onError: function(error, file) {
+    console.log('error code ' + error.code + ': ' + error.message)
   },
 
   render: function() {
@@ -32,8 +36,7 @@ var FilesDemo = React.createClass({
       <div className="files">
         <Files
           onSubmit={this.onSubmit}
-          onUnaccepted={this.onUnaccepted}
-          accepts={['image/*', 'application/pdf', '.txt']}
+          onError={this.onError}
           maxFiles={10}
           maxSize={10000000}
           minSize={1000}
