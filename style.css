@@ -1,0 +1,134 @@
+body {
+  font-family: 'Roboto', sans-serif;
+}
+.files {
+  width: 600px;
+}
+.files-container {
+  border: 1px solid #D3D3D3;
+}
+.files-dropzone-outer {
+  display: table;
+  height: 150px;
+  width: 100%;
+  padding: 3px;
+  box-sizing: border-box;
+}
+.files-dropzone {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  margin: 10px;
+  border: 1px dashed #D3D3D3;
+  height: 150px;
+  cursor: pointer;
+}
+.files-dropzone:before {
+    content: "Drop files here or click to upload.";
+    font-size: 24px;
+}
+.files-dropzone-ondragenter {
+  border: 1px solid lightgreen;
+  color: lightgreen;
+}
+.files-buttons {
+  border-top: 1px solid #D3D3D3;
+  cursor: pointer;
+}
+.files-button-submit {
+  display: inline-block;
+  text-align: center;
+  height: 40px;
+  line-height: 40px;
+  width: 50%;
+  box-sizing: border-box;
+  border-right: 1px solid #D3D3D3;
+}
+.files-button-submit:before {
+  content: "Submit"
+}
+.files-button-clear {
+  display: inline-block;
+  text-align: center;
+  height: 40px;
+  line-height: 40px;
+  width: 50%;
+  box-sizing: border-box;
+}
+.files-button-clear:before {
+  content: "Clear"
+}
+.files-list {
+  border-top: 1px solid #D3D3D3;
+  max-height: 200px;
+  overflow-y: scroll;
+}
+.files-list ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.files-list li:last-child {
+  border: none;
+}
+.files-list-item {
+  height: 60px;
+  padding: 10px 0px 10px 10px;
+  border-bottom: 1px solid #D3D3D3;
+}
+.files-list-item-content {
+  float: left;
+  padding-top: 5px;
+  padding-left: 10px;
+  width: calc(100% - 130px);
+}
+.files-list-item-content-item {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.files-list-item-content-item-1 {
+  font-size: 20px;
+  line-height: 30px;
+}
+.files-list-item-content-item-2 {
+  font-size: 16px;
+  line-height: 20px;
+}
+.files-list-item-preview {
+  height: 60px;
+  width: 60px;
+  float: left;
+}
+.files-list-item-preview-image {
+  height: 100%;
+  width: 100%;
+}
+.files-list-item-preview-extension {
+  text-align: center;
+  line-height: 60px;
+  color: #FFF;
+  background-color: #D3D3D3;
+  font-size: 16px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding-left: 5px;
+  padding-right: 5px;
+  box-sizing: border-box;
+}
+.files-list-item-remove {
+  height: 60px;
+  width: 60px;
+  float: right;
+  cursor: pointer;
+  background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjxzdmcgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDQ4IDQ4IiB3aWR0aD0iNDgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTM4IDEyLjgzbC0yLjgzLTIuODMtMTEuMTcgMTEuMTctMTEuMTctMTEuMTctMi44MyAyLjgzIDExLjE3IDExLjE3LTExLjE3IDExLjE3IDIuODMgMi44MyAxMS4xNy0xMS4xNyAxMS4xNyAxMS4xNyAyLjgzLTIuODMtMTEuMTctMTEuMTd6Ii8+PHBhdGggZD0iTTAgMGg0OHY0OGgtNDh6IiBmaWxsPSJub25lIi8+PC9zdmc+) no-repeat center center;
+  background-size: 30px 30px;
+}
+.files-list-item-remove-image {
+  height: 30px;
+  width: 30px;
+  margin-top: 15px;
+  margin-right: 10px;
+  float: right;
+}

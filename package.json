@@ -1,6 +1,6 @@
 {
   "name": "react-files",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "main": "src/Files.js",
   "description": "A file input (dropzone) management component for React",
   "scripts": {

@@ -3,33 +3,24 @@ import ReactDOM from 'react-dom'
 import Files from './Files'
 
 var FilesDemo = React.createClass({
-  // getInitialState: function () {
-  //   return {
-  //     files: []
-  //   }
-  // },
+  onSubmit: function(files) {
+    console.log(files)
+  },
 
-  // onDrop: function (files) {
-  //   console.log(files)
-  //   this.setState({
-  //     files: files
-  //   })
-  // },
+  onUnaccepted: function(file) {
+    console.log(file.name + ' is not a valid file type.')
+  },
 
-  // {this.state.files.length > 0
-  //   ? <div>
-  //       <h2>Uploading {this.state.files.length} files...</h2>
-  //       <div>{this.state.files.map((file) => <img key={file.id} src={file.preview} />)}</div>
-  //     </div>
-  //   : null}
-
-  render: function () {
+  render: function() {
     return (
       <div className="files">
-        <Files onDrop={this.onDrop} onClick={this.onClick} />
+        <Files
+          onSubmit={this.onSubmit}
+          onUnaccepted={this.onUnaccepted}
+        />
       </div>
     )
   }
 })
 
-ReactDOM.render(<FilesDemo name="Jane" />, document.getElementById('container'))
+ReactDOM.render(<FilesDemo />, document.getElementById('container'))
