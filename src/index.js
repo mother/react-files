@@ -7,8 +7,8 @@ var FilesDemo = React.createClass({
     console.log(files)
   },
 
-  onUnaccepted: function(file) {
-    console.log(file.name + ' is not a valid file type.')
+  onError: function(error, file) {
+    console.log('error code ' + error.code + ': ' + error.message)
   },
 
   render: function() {
@@ -16,7 +16,10 @@ var FilesDemo = React.createClass({
       <div className="files">
         <Files
           onSubmit={this.onSubmit}
-          onUnaccepted={this.onUnaccepted}
+          onError={this.onError}
+          maxFiles={10}
+          maxSize={10000000}
+          minSize={1000}
         />
       </div>
     )

@@ -17,7 +17,7 @@ npm install react-files --save
 
 ## Usage
 
-```
+```js
 var FilesDemo = React.createClass({
   onSubmit: function(files) {
     console.log(files)
@@ -34,6 +34,9 @@ var FilesDemo = React.createClass({
           onSubmit={this.onSubmit}
           onUnaccepted={this.onUnaccepted}
           accepts={['image/*', 'application/pdf', '.txt']}
+          maxFiles={10}
+          maxSize={10000000}
+          minSize={1000}
         />
       </div>
     )
@@ -50,9 +53,23 @@ ReactDOM.render(<FilesDemo />, document.getElementById('container'))
 
 Perform work on files added when submit is clicked.
 
-> `onUnaccepted(file)` - Function
+---
 
-Perform work or notify the user when a file is dropped/added that is unacceptable.
+> `onError(error, file)` - Function
+
+`error.code` - Number
+
+`error.message` - String
+
+Perform work or notify the user when an error occurs.
+
+Error codes are:
+1. Invalid file type
+2. File too large
+3. File too small
+4. Maximum file count reached
+
+---
 
 > `accepts` - Array of String
 
@@ -62,6 +79,26 @@ Example
 ```js
 accepts={['image/*', 'video/mp4', 'audio/*', '.pdf', '.txt']}
 ```
+
+---
+
+> `maxFiles` - Number
+
+Maximum number of files allowed
+
+---
+
+> `maxSize` - Number
+
+Maximum file size allowed (in bytes)
+
+---
+
+> `minSize` - Number
+
+Minimum file size allowed (in bytes)
+
+---
 
 ### Styling
 
