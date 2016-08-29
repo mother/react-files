@@ -18,14 +18,10 @@ body {
   display: table-cell;
   vertical-align: middle;
   text-align: center;
-  margin: 10px;
+  padding: 10px;
   border: 1px dashed #D3D3D3;
   height: 150px;
   cursor: pointer;
-}
-.files-dropzone:before {
-    content: "Drop files here or click to upload.";
-    font-size: 24px;
 }
 .files-dropzone-ondragenter {
   border: 1px solid lightgreen;
@@ -59,9 +55,9 @@ body {
   content: "Clear"
 }
 .files-list {
-  border-top: 1px solid #D3D3D3;
-  max-height: 200px;
-  overflow-y: scroll;
+  /*border-top: 1px solid #D3D3D3;*/
+  /*max-height: 200px;*/
+  /*overflow-y: scroll;*/
 }
 .files-list ul {
   list-style: none;
@@ -74,7 +70,7 @@ body {
 .files-list-item {
   height: 60px;
   padding: 10px 0px 10px 10px;
-  border-bottom: 1px solid #D3D3D3;
+  /*border-bottom: 1px solid #D3D3D3;*/
 }
 .files-list-item-content {
   float: left;
