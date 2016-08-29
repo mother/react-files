@@ -4,6 +4,8 @@ class Files extends React.Component {
   constructor (props, context) {
     super(props, context)
     this.onDrop = this.onDrop.bind(this)
+    this.onDragEnter = this.onDragEnter.bind(this)
+    this.onDragLeave = this.onDragLeave.bind(this)
     this.openFileChooser = this.openFileChooser.bind(this)
 
     this.id = 1
@@ -60,15 +62,15 @@ class Files extends React.Component {
         break
       }
 
-      // If file is acceptable, unshift or replace
+      // If file is acceptable, push or replace
       if (this.fileTypeAcceptable(file) && this.fileSizeAcceptable(file)) {
-        files.unshift(file)
+        files.push(file)
       }
     }
     this.setState({
       files: this.props.multiple === false
         ? files
-        : [...files, ...this.state.files]
+        : [...this.state.files, ...files]
     }, () => {
       this.props.onChange.call(this, this.state.files)
     })
@@ -80,11 +82,13 @@ class Files extends React.Component {
   }
 
   onDragEnter (event) {
-    event.target.className += ' files-dropzone-ondragenter'
+    let el = document.getElementsByClassName(this.props.className)[0]
+    el.className += ' ' + this.props.dropActiveClassName
   }
 
   onDragLeave (event) {
-    event.target.className = event.target.className.replace(' files-dropzone-ondragenter', '')
+    let el = document.getElementsByClassName(this.props.className)[0]
+    el.className = el.className.replace(' ' + this.props.dropActiveClassName, '')
   }
 
   openFileChooser () {
@@ -123,13 +127,13 @@ class Files extends React.Component {
   }
 
   fileSizeAcceptable (file) {
-    if (file.size > this.props.maxSize) {
+    if (file.size > this.props.maxFileSize) {
       this.onError({
         code: 2,
         message: file.name + ' is too large'
       }, file)
       return false
-    } else if (file.size < this.props.minSize) {
+    } else if (file.size < this.props.minFileSize) {
       this.onError({
         code: 3,
         message: file.name + ' is too small'
@@ -229,14 +233,15 @@ Files.propTypes = {
     React.PropTypes.arrayOf(React.PropTypes.node),
     React.PropTypes.node
   ]),
-  className: React.PropTypes.string,
+  className: React.PropTypes.string.isRequired,
+  dropActiveClassName: React.PropTypes.string,
   onChange: React.PropTypes.func,
   onError: React.PropTypes.func,
   accepts: React.PropTypes.array,
   multiple: React.PropTypes.bool,
   maxFiles: React.PropTypes.number,
-  maxSize: React.PropTypes.number,
-  minSize: React.PropTypes.number,
+  maxFileSize: React.PropTypes.number,
+  minFileSize: React.PropTypes.number,
   clickable: React.PropTypes.bool
 }
 
@@ -247,11 +252,11 @@ Files.defaultProps = {
   onError: function (error, file) {
     console.log('error code ' + error.code + ': ' + error.message)
   },
-  accepts: [''],
+  dropActiveClassName: 'files-dropzone-active',
   multiple: true,
   maxFiles: Infinity,
-  maxSize: Infinity,
-  minSize: 0,
+  maxFileSize: Infinity,
+  minFileSize: 0,
   clickable: true
 }
 

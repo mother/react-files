@@ -11,11 +11,13 @@ react-files
 
 Install from NPM and include it in your own React build process (using [Browserify](http://browserify.org), [Webpack](http://webpack.github.io/), etc).
 
-```
+```bash
 npm install react-files --save
 ```
 
 ## Usage
+
+#### Basic
 
 ```js
 import React from 'react'
@@ -23,11 +25,11 @@ import ReactDOM from 'react-dom'
 import Files from 'react-files'
 
 var FilesDemo = React.createClass({
-  onSubmit: function(files) {
+  onFilesChange: function (files) {
     console.log(files)
   },
 
-  onError: function(error, file) {
+  onFilesError: function (error, file) {
     console.log('error code ' + error.code + ': ' + error.message)
   },
 
@@ -35,12 +37,18 @@ var FilesDemo = React.createClass({
     return (
       <div className="files">
         <Files
-          onSubmit={this.onSubmit}
-          onError={this.onError}
-          maxFiles={10}
-          maxSize={10000000}
-          minSize={1000}
-        />
+          className='files-dropzone'
+          onChange={this.onFilesChange}
+          onError={this.onFilesError}
+          accepts={['image/png', 'text/plain', 'audio/*']}
+          multiple
+          maxFiles={3}
+          maxFileSize={10000000}
+          minFileSize={0}
+          clickable
+        >
+          Drop files here or click to upload
+        </Files>
       </div>
     )
   }
@@ -49,20 +57,31 @@ var FilesDemo = React.createClass({
 ReactDOM.render(<FilesDemo />, document.getElementById('container'))
 ```
 
-### Props
+#### Advanced
 
+See "Tinker" instructions below to run and view all examples.
 
-> `onSubmit(files)` - Function
+### Tinker
+
+```
+git clone https://github.com/mother/react-files
+npm install
+npm start
+```
+
+Then visit http://localhost:8000/
+
+## Props
+
+`onChange(files)` - *Function*
 
 Perform work on files added when submit is clicked.
 
 ---
 
-> `onError(error, file)` - Function
-
-`error.code` - Number
-
-`error.message` - String
+`onError(error, file)` - *Function*
+  - `error.code` - Number
+  - `error.message` - String
 
 Perform work or notify the user when an error occurs.
 
@@ -74,74 +93,71 @@ Error codes are:
 
 ---
 
-> `accepts` - Array of String
+`accepts` - *Array* of *String*
 
-Control what types of generic/specific MIME types, or specific extensions can be dropped/added.
+Control what types of generic/specific MIME types, can be dropped/added.
 
-Example
+> See full list of MIME types here: http://www.iana.org/assignments/media-types/media-types.xhtml
+
+Example:
 ```js
-accepts={['image/*', 'video/mp4', 'audio/*', '.pdf', '.txt']}
+accepts={['image/*', 'video/mp4', 'audio/*']}
 ```
 
 ---
 
-> `maxFiles` - Number
+`multiple` - *Boolean*
+
+Default: `true`
+
+Allow multiple files
+
+---
+
+`clickable` - *Boolean*
+
+Default: `true`
+
+Dropzone is clickable to open file browser. Disable for dropping only.
+
+---
+
+`maxFiles` - *Number*
+
+Default: `Infinity`
 
 Maximum number of files allowed
 
 ---
 
-> `maxSize` - Number
+`maxFileSize` - *Number*
+
+Default: `Infinity`
 
 Maximum file size allowed (in bytes)
 
 ---
 
-> `minSize` - Number
+`minFileSize` - *Number*
+
+Default: `0`
 
 Minimum file size allowed (in bytes)
 
 ---
 
-### Styling
+`dropActiveClassName` - *String*
 
-Be sure to style your Files component, available selectors are (view `style.css`):
-- .files-container
-- .files-dropzone-outer
-- .files-dropzone
-- .files-dropzone:before
-- .files-dropzone-ondragenter
-- .files-buttons
-- .files-button-submit
-- .files-button-submit:before
-- .files-button-clear
-- .files-button-clear:before
-- .files-list
-- .files-list ul
-- .files-list li:last-child
-- .files-list-item
-- .files-list-item-content
-- .files-list-item-content-item
-- .files-list-item-content-item-1
-- .files-list-item-content-item-2
-- .files-list-item-preview
-- .files-list-item-preview-image
-- .files-list-item-preview-extension
-- .files-list-item-remove
-- .files-list-item-remove-image
+Default: `'files-dropzone-active'`
+
+Class added to the Files component when user is actively hovering over the dropzone with files selected.
+
+---
 
 ### Test (todo)
 
 ```
 npm test
-```
-
-### Tinker
-
-```
-git clone https://github.com/mother/react-files
-npm install
-npm start
 ```
 
 ### License

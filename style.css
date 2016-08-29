@@ -1,32 +1,20 @@
 body {
   font-family: 'Roboto', sans-serif;
 }
-.files {
-  width: 600px;
-}
-.files-container {
-  border: 1px solid #D3D3D3;
-}
-.files-dropzone-outer {
-  display: table;
-  height: 150px;
-  width: 100%;
-  padding: 3px;
-  box-sizing: border-box;
-}
-.files-dropzone {
+
+
+/* LIST */
+/* ================== */
+
+.files-dropzone-list {
   display: table-cell;
   vertical-align: middle;
   text-align: center;
   padding: 10px;
   border: 1px dashed #D3D3D3;
-  height: 150px;
   cursor: pointer;
 }
-.files-dropzone-ondragenter {
-  border: 1px solid lightgreen;
-  color: lightgreen;
-}
+
 .files-buttons {
   border-top: 1px solid #D3D3D3;
   cursor: pointer;
@@ -55,9 +43,7 @@ body {
   content: "Clear"
 }
 .files-list {
-  /*border-top: 1px solid #D3D3D3;*/
-  /*max-height: 200px;*/
-  /*overflow-y: scroll;*/
+  width: 300px;
 }
 .files-list ul {
   list-style: none;
@@ -127,4 +113,26 @@ body {
   margin-top: 15px;
   margin-right: 10px;
   float: right;
+}
+
+
+
+/* GALLERY */
+/* ================== */
+
+.files-dropzone-gallery {
+  padding: 10px;
+  border: 1px dashed #D3D3D3;
+  min-height: 300px;
+  width: 500px;
+}
+.files-gallery-item {
+  height: 80px;
+  margin: 5px;
+}
+
+
+.files-dropzone-active {
+  border: 1px solid lightgreen;
+  color: lightgreen;
 }

@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import Files from './Files'
 
-var FilesDemo = React.createClass({
+var FilesDemo1 = React.createClass({
   getInitialState () {
     return {
       files: []
@@ -36,17 +36,17 @@ var FilesDemo = React.createClass({
   render: function () {
     return (
       <div>
+        <h1>Example 1 - List</h1>
         <Files
           ref='files'
-          className='files-dropzone'
+          className='files-dropzone-list'
           onChange={this.onFilesChange}
           onError={this.onFilesError}
-          accepts={['image/png', 'text/plain', 'audio/*']}
           multiple
-          maxFiles={3}
+          maxFiles={10}
           maxFileSize={10000000}
           minFileSize={0}
-          clickable={false}
+          clickable
         >
           Drop files here or click to upload
         </Files>
@@ -81,4 +81,56 @@ var FilesDemo = React.createClass({
   }
 })
 
-ReactDOM.render(<FilesDemo />, document.getElementById('container'))
+var FilesDemo2 = React.createClass({
+  getInitialState () {
+    return {
+      files: []
+    }
+  },
+
+  onFilesChange: function (files) {
+    this.setState({
+      files
+    }, () => {
+      console.log(this.state.files)
+    })
+  },
+
+  onFilesError: function (error, file) {
+    console.log('error code ' + error.code + ': ' + error.message)
+  },
+
+  filesRemoveAll: function () {
+    this.refs.files.removeFiles()
+  },
+
+  render: function () {
+    return (
+      <div>
+        <h1>Example 2 - Gallery</h1>
+        <Files
+          ref='files'
+          className='files-dropzone-gallery'
+          onChange={this.onFilesChange}
+          onError={this.onFilesError}
+          accepts={['image/*']}
+          multiple
+          clickable={false}
+        >
+          {
+            this.state.files.length > 0
+            ? <div className='files-gallery'>
+              {this.state.files.map((file) =>
+                <img className='files-gallery-item' src={file.preview.url} key={file.id} />
+              )}
+            </div>
+            : <div>Drop images here</div>
+          }
+        </Files>
+        <button onClick={this.filesRemoveAll}>Remove All Files</button>
+      </div>
+    )
+  }
+})
+
+ReactDOM.render(<div><FilesDemo1 /><FilesDemo2 /></div>, document.getElementById('container'))
