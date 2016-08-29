@@ -4,8 +4,6 @@ class Files extends React.Component {
   constructor(props, context) {
     super(props, context)
     this.onDrop = this.onDrop.bind(this)
-    this.onSubmit = this.onSubmit.bind(this)
-    this.onClear = this.onClear.bind(this)
     this.openFileChooser = this.openFileChooser.bind(this)
 
     this.id = 1
@@ -27,7 +25,13 @@ class Files extends React.Component {
       let file = filesAdded[i]
 
       // Assign file an id
-      file.id = 'files-list-item-' + this.id++
+      file.id = 'files-' + this.id++
+
+      // Tell file it's own extension
+      file.extension = this.fileExtension(file)
+
+      // Tell file it's own readable size
+      file.sizeReadable = this.fileSizeReadable(file.size)
 
       // Add preview, either image or file extension
       if (file.type && this.mimeTypeLeft(file.type) === 'image') {
@@ -37,8 +41,7 @@ class Files extends React.Component {
         }
       } else {
         file.preview = {
-          type: 'file',
-          extension: this.fileExtension(file)
+          type: 'file'
         }
       }
 
@@ -52,10 +55,13 @@ class Files extends React.Component {
       }
 
       // If file is acceptable, unshift
-      if (this.fileTypeAcceptable(file) &&
-          this.fileSizeAcceptable(file)) files.unshift(file)
+      if (this.fileTypeAcceptable(file) && this.fileSizeAcceptable(file)) {
+        files.unshift(file)
+      }
     }
-    this.setState({ files: [...files, ...this.state.files] })
+    this.setState({ files: [...files, ...this.state.files] }, () => {
+      this.props.onChange.call(this, this.state.files)
+    })
   }
 
   onDragOver(event) {
@@ -76,16 +82,10 @@ class Files extends React.Component {
     this.inputElement.click()
   }
 
-  removeFile(fileId) {
-    this.setState({
-      files: this.state.files.filter(file => file.id !== fileId)
-    })
-  }
-
   fileTypeAcceptable(file) {
    let accepts = this.props.accepts
     if (accepts) {
-      if (accepts.indexOf(this.fileExtension(file)) !== -1) return true
+      if (accepts.indexOf(file.extension) !== -1) return true
       if (file.type) {
         let typeLeft = this.mimeTypeLeft(file.type)
         let typeRight = this.mimeTypeRight(file.type)
@@ -142,7 +142,7 @@ class Files extends React.Component {
   fileExtension(file) {
     let extensionSplit = file.name.split('.')
     if (extensionSplit.length > 1) {
-      return '.' + extensionSplit[extensionSplit.length - 1]
+      return extensionSplit[extensionSplit.length - 1]
     } else {
       return 'none'
     }
@@ -160,88 +160,56 @@ class Files extends React.Component {
     }
   }
 
-  onSubmit() {
-    this.props.onSubmit.call(this, this.state.files)
-  }
-
   onError(error, file) {
     this.props.onError.call(this, error, file)
   }
 
-  onClear() {
+  removeFile(fileToRemove) {
+    this.setState({
+      files: this.state.files.filter(file => file.id !== fileToRemove.id)
+    }, () => {
+      this.props.onChange.call(this, this.state.files)
+    })
+  }
+
+  removeFiles() {
     this.setState({
       files: []
+    }, () => {
+      this.props.onChange.call(this, this.state.files)
     })
   }
 
   render() {
-
     const inputAttributes = {
       type: 'file',
-      multiple: true,
+      multiple: this.props.multiple === false ? false : true,
       style: { display: 'none' },
       ref: element => this.inputElement = element,
       onChange: this.onDrop
     }
 
     return (
-      <div
-        className="files-container"
-      >
+      <div>
         <input
           // {...inputProps/* expand user provided inputProps first so inputAttributes override them */}
           {...inputAttributes}
         />
-        <div
-          className="files-dropzone-outer"
-        >
-          <div className="files-dropzone"
-            onClick={this.openFileChooser}
-            onDrop={this.onDrop}
-            onDragOver={this.onDragOver}
-            onDragEnter={this.onDragEnter}
-            onDragLeave={this.onDragLeave}
-          />
-        </div>
+        <div className={this.props.className}
+          onClick={this.openFileChooser}
+          onDrop={this.onDrop}
+          onDragOver={this.onDragOver}
+          onDragEnter={this.onDragEnter}
+          onDragLeave={this.onDragLeave}
+        />
         {this.props.children}
-        {
-          this.state.files.length > 0
-          ? <div>
-              <div className="files-list">
-                <ul>{this.state.files.map((file) =>
-                  <li className="files-list-item" key={file.id}>
-                    <div className="files-list-item-preview">
-                      {file.preview.type === 'image'
-                      ? <img className="files-list-item-preview-image" src={file.preview.url} />
-                      : <div className="files-list-item-preview-extension">{file.preview.extension}</div>}
-                    </div>
-                    <div className="files-list-item-content">
-                      <div className="files-list-item-content-item files-list-item-content-item-1">{file.name}</div>
-                      <div className="files-list-item-content-item-2 files-list-item-content-item-2" className="files-list-item-content-item">{this.fileSizeReadable(file.size)}</div>
-                    </div>
-                    <div
-                      id={file.id}
-                      className="files-list-item-remove"
-                      onClick={this.removeFile.bind(this, file.id)}
-                    />
-                  </li>
-                )}</ul>
-              </div>
-              <div className="files-buttons">
-                <div onClick={this.onSubmit} className="files-button-submit" />
-                <div onClick={this.onClear} className="files-button-clear" />
-              </div>
-            </div>
-          : null
-        }
       </div>
-
     )
   }
 }
 
 Files.propTypes = {
-  onSubmit: React.PropTypes.func.isRequired,
+  onChange: React.PropTypes.func.isRequired,
   onError: React.PropTypes.func.isRequired,
   maxFiles: React.PropTypes.number,
   maxSize: React.PropTypes.number,
@@ -249,12 +217,13 @@ Files.propTypes = {
 }
 
 Files.defaultProps = {
-   onSubmit: function (files) {
+   onChange: function (files) {
       console.log(files)
    },
    onError: function (error, file) {
       console.log('error code ' + error.code + ': ' + error.message)
    },
+   multiple: true,
    maxFiles: Infinity,
    maxSize: Infinity,
    minSize: 0
