@@ -1,19 +1,33 @@
 import React from 'react'
-import expect from 'expect'
-import { createRenderer } from 'react-addons-test-utils'
-import expectJSX from 'expect-jsx'
-expect.extend(expectJSX)
+import { mount } from 'enzyme'
+// import sinon from 'sinon'
+import { expect } from 'chai'
+import { describe, it } from 'mocha'
 
-import Files from '../src/Files.js'
+// Add DOM environment
+import jsdom from 'jsdom'
+const doc = jsdom.jsdom('<!doctype html><html><body></body></html>')
+global.document = doc
+global.window = doc.defaultView
 
-/*
-describe('Files', () => {
-  it('works', () => {
-    let renderer = createRenderer()
-    renderer.render(<Files name="Jane" />)
-    let actualElement = renderer.getRenderOutput()
-    let expectedElement = <h1>Hello, Jane</h1>
-    expect(actualElement).toEqualJSX(expectedElement)
+import Files from '../src/Files'
+
+describe('<Files />', () => {
+  it('allows us to set props', () => {
+    const wrapper = mount(<Files bar='baz' />)
+    expect(wrapper.props().bar).to.equal('baz')
+    wrapper.setProps({ bar: 'foo' })
+    expect(wrapper.props().bar).to.equal('foo')
+  })
+
+  it('renders children props', () => {
+    const wrapper = mount(
+      <Files>
+        <div className='files-child'>child content</div>
+      </Files>
+    )
+    expect(wrapper.containsMatchingElement(
+      <div className='files-child'>child content</div>
+    )).to.equal(true)
   })
 })
-*/
