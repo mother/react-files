@@ -252,7 +252,9 @@ Files.defaultProps = {
   onError: function (error, file) {
     console.log('error code ' + error.code + ': ' + error.message)
   },
+  className: 'files-dropzone',
   dropActiveClassName: 'files-dropzone-active',
+  accepts: null,
   multiple: true,
   maxFiles: Infinity,
   maxFileSize: Infinity,
