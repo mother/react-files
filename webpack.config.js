@@ -9,9 +9,6 @@ module.exports = {
     publicPath: '/static/'
   },
   plugins: [],
-  externals: {
-    react: 'react'
-  },
   module: {
     loaders: [{
       test: /\.js$/,
