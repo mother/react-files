@@ -197,7 +197,7 @@ class Files extends React.Component {
     const inputAttributes = {
       type: 'file',
       accept: this.props.accepts ? this.props.accepts.join() : '',
-      multiple: this.props.multiple ? this.props.multiple : true,
+      multiple: this.props.multiple,
       style: { display: 'none' },
       ref: (element) => {
         this.inputElement = element

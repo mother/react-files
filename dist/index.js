@@ -303,7 +303,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var inputAttributes = {
 	        type: 'file',
 	        accept: this.props.accepts ? this.props.accepts.join() : '',
-	        multiple: this.props.multiple ? this.props.multiple : true,
+	        multiple: this.props.multiple,
 	        style: { display: 'none' },
 	        ref: function ref(element) {
 	          _this5.inputElement = element;
