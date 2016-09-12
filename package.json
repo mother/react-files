@@ -1,13 +1,15 @@
 {
   "name": "react-files",
-  "version": "2.0.0",
-  "main": "src/Files.js",
+  "version": "2.1.0",
+  "main": "dist/index.js",
   "description": "A file input (dropzone) management component for React",
   "scripts": {
-    "start": "node server.js",
+    "build": "rm -rf dist && webpack",
+    "dev": "node server.js",
     "test": "mocha --compilers js:babel-core/register --recursive test/test.js",
     "test:watch": "mocha --compilers js:babel-core/register --recursive test/test.js --watch --reporter min"
   },
+  "files": ["dist/index.js"],
   "repository": {
     "type": "git",
     "url": "https://github.com/mother/react-files.git"

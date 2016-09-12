@@ -66,10 +66,16 @@ See "Tinker" instructions below to run and view all examples.
 ```
 git clone https://github.com/mother/react-files
 npm install
-npm start
+npm run dev
 ```
 
 Then visit http://localhost:8000/
+
+### Build
+
+```
+npm run build
+```
 
 ## Props
 

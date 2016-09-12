@@ -1,26 +1,26 @@
-var path = require('path');
-var webpack = require('webpack');
+var path = require('path')
+// var webpack = require('webpack')
 
 module.exports = {
-  devtool: 'eval',
-  entry: [
-    'webpack-dev-server/client?http://localhost:8000',
-    'webpack/hot/only-dev-server',
-    './src/index'
-  ],
+  entry: './src/index.js',
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: 'bundle.js',
+    filename: 'index.js',
     publicPath: '/static/'
   },
-  plugins: [
-    new webpack.HotModuleReplacementPlugin()
-  ],
+  plugins: [],
+  externals: {
+    react: 'react'
+  },
   module: {
     loaders: [{
       test: /\.js$/,
-      loaders: ['react-hot', 'babel'],
+      loaders: ['babel'],
       include: path.join(__dirname, 'src')
-    }]
+    }],
+    resolve: {
+      // Can require('file') instead of require('file.js') etc.
+      extensions: ['', '.js', '.json']
+    }
   }
-};
+}

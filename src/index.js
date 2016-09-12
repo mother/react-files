@@ -1,136 +1,265 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-import Files from './Files'
 
-var FilesDemo1 = React.createClass({
-  getInitialState () {
-    return {
+class Files extends React.Component {
+  constructor (props, context) {
+    super(props, context)
+    this.onDrop = this.onDrop.bind(this)
+    this.onDragEnter = this.onDragEnter.bind(this)
+    this.onDragLeave = this.onDragLeave.bind(this)
+    this.openFileChooser = this.openFileChooser.bind(this)
+
+    this.id = 1
+
+    this.state = {
       files: []
     }
-  },
+  }
 
-  onFilesChange: function (files) {
-    this.setState({
-      files
-    }, () => {
-      console.log(this.state.files)
-    })
-  },
+  onDrop (event) {
+    event.preventDefault()
+    this.onDragLeave(event)
 
-  onFilesError: function (error, file) {
-    console.log('error code ' + error.code + ': ' + error.message)
-  },
+    // Collect added files, perform checking, cast pseudo-array to Array,
+    // then return to method
+    let filesAdded = event.dataTransfer ? event.dataTransfer.files : event.target.files
 
-  filesRemoveOne: function (file) {
-    this.refs.files.removeFile(file)
-  },
+    // Multiple files dropped when not allowed
+    if (this.props.multiple === false && filesAdded.length > 1) {
+      filesAdded = [filesAdded[0]]
+    }
 
-  filesRemoveAll: function () {
-    this.refs.files.removeFiles()
-  },
+    let files = []
+    for (let i = 0; i < filesAdded.length; i++) {
+      let file = filesAdded[i]
 
-  filesUpload: function () {
-    window.alert('Ready to upload ' + this.state.files.length + ' file(s)!')
-  },
+      // Assign file an id
+      file.id = 'files-' + this.id++
 
-  render: function () {
-    return (
-      <div>
-        <h1>Example 1 - List</h1>
-        <Files
-          ref='files'
-          className='files-dropzone-list'
-          onChange={this.onFilesChange}
-          onError={this.onFilesError}
-          multiple
-          maxFiles={10}
-          maxFileSize={10000000}
-          minFileSize={0}
-          clickable
-        >
-          Drop files here or click to upload
-        </Files>
-        <button onClick={this.filesRemoveAll}>Remove All Files</button>
-        <button onClick={this.filesUpload}>Upload</button>
-        {
-          this.state.files.length > 0
-          ? <div className='files-list'>
-            <ul>{this.state.files.map((file) =>
-              <li className='files-list-item' key={file.id}>
-                <div className='files-list-item-preview'>
-                  {file.preview.type === 'image'
-                  ? <img className='files-list-item-preview-image' src={file.preview.url} />
-                  : <div className='files-list-item-preview-extension'>{file.extension}</div>}
-                </div>
-                <div className='files-list-item-content'>
-                  <div className='files-list-item-content-item files-list-item-content-item-1'>{file.name}</div>
-                  <div className='files-list-item-content-item files-list-item-content-item-2'>{file.sizeReadable}</div>
-                </div>
-                <div
-                  id={file.id}
-                  className='files-list-item-remove'
-                  onClick={this.filesRemoveOne.bind(this, file)} // eslint-disable-line
-                />
-              </li>
-            )}</ul>
-          </div>
-          : null
+      // Tell file it's own extension
+      file.extension = this.fileExtension(file)
+
+      // Tell file it's own readable size
+      file.sizeReadable = this.fileSizeReadable(file.size)
+
+      // Add preview, either image or file extension
+      if (file.type && this.mimeTypeLeft(file.type) === 'image') {
+        file.preview = {
+          type: 'image',
+          url: window.URL.createObjectURL(file)
         }
-      </div>
-    )
-  }
-})
+      } else {
+        file.preview = {
+          type: 'file'
+        }
+      }
 
-var FilesDemo2 = React.createClass({
-  getInitialState () {
-    return {
-      files: []
+      // Check for file max limit
+      if (this.state.files.length + files.length >= this.props.maxFiles) {
+        this.onError({
+          code: 4,
+          message: 'maximum file count reached'
+        }, file)
+        break
+      }
+
+      // If file is acceptable, push or replace
+      if (this.fileTypeAcceptable(file) && this.fileSizeAcceptable(file)) {
+        files.push(file)
+      }
     }
-  },
-
-  onFilesChange: function (files) {
     this.setState({
-      files
+      files: this.props.multiple === false
+        ? files
+        : [...this.state.files, ...files]
     }, () => {
-      console.log(this.state.files)
+      this.props.onChange.call(this, this.state.files)
     })
-  },
+  }
 
-  onFilesError: function (error, file) {
-    console.log('error code ' + error.code + ': ' + error.message)
-  },
+  onDragOver (event) {
+    event.preventDefault()
+    event.stopPropagation()
+  }
 
-  filesRemoveAll: function () {
-    this.refs.files.removeFiles()
-  },
+  onDragEnter (event) {
+    let el = document.getElementsByClassName(this.props.className)[0]
+    el.className += ' ' + this.props.dropActiveClassName
+  }
 
-  render: function () {
+  onDragLeave (event) {
+    let el = document.getElementsByClassName(this.props.className)[0]
+    el.className = el.className.replace(' ' + this.props.dropActiveClassName, '')
+  }
+
+  openFileChooser () {
+    this.inputElement.value = null
+    this.inputElement.click()
+  }
+
+  fileTypeAcceptable (file) {
+    let accepts = this.props.accepts
+    if (accepts) {
+      if (file.type) {
+        let typeLeft = this.mimeTypeLeft(file.type)
+        let typeRight = this.mimeTypeRight(file.type)
+        for (let i = 0; i < accepts.length; i++) {
+          let accept = accepts[i]
+          let acceptLeft = accept.split('/')[0]
+          let acceptRight = accept.split('/')[1]
+          if (acceptLeft && acceptRight) {
+            if (acceptLeft === typeLeft && acceptRight === '*') {
+              return true
+            }
+            if (acceptLeft === typeLeft && acceptRight === typeRight) {
+              return true
+            }
+          }
+        }
+      }
+      this.onError({
+        code: 1,
+        message: file.name + ' is not a valid file type'
+      }, file)
+      return false
+    } else {
+      return true
+    }
+  }
+
+  fileSizeAcceptable (file) {
+    if (file.size > this.props.maxFileSize) {
+      this.onError({
+        code: 2,
+        message: file.name + ' is too large'
+      }, file)
+      return false
+    } else if (file.size < this.props.minFileSize) {
+      this.onError({
+        code: 3,
+        message: file.name + ' is too small'
+      }, file)
+      return false
+    } else {
+      return true
+    }
+  }
+
+  mimeTypeLeft (mime) {
+    return mime.split('/')[0]
+  }
+
+  mimeTypeRight (mime) {
+    return mime.split('/')[1]
+  }
+
+  fileExtension (file) {
+    let extensionSplit = file.name.split('.')
+    if (extensionSplit.length > 1) {
+      return extensionSplit[extensionSplit.length - 1]
+    } else {
+      return 'none'
+    }
+  }
+
+  fileSizeReadable (size) {
+    if (size >= 1000000000) {
+      return Math.ceil(size / 1000000000) + 'GB'
+    } else if (size >= 1000000) {
+      return Math.ceil(size / 1000000) + 'MB'
+    } else if (size >= 1000) {
+      return Math.ceil(size / 1000) + 'kB'
+    } else {
+      return Math.ceil(size) + 'B'
+    }
+  }
+
+  onError (error, file) {
+    this.props.onError.call(this, error, file)
+  }
+
+  removeFile (fileToRemove) {
+    this.setState({
+      files: this.state.files.filter(file => file.id !== fileToRemove.id)
+    }, () => {
+      this.props.onChange.call(this, this.state.files)
+    })
+  }
+
+  removeFiles () {
+    this.setState({
+      files: []
+    }, () => {
+      this.props.onChange.call(this, this.state.files)
+    })
+  }
+
+  render () {
+    const inputAttributes = {
+      type: 'file',
+      accept: this.props.accepts ? this.props.accepts.join() : '',
+      multiple: this.props.multiple ? this.props.multiple : true,
+      style: { display: 'none' },
+      ref: (element) => {
+        this.inputElement = element
+      },
+      onChange: this.onDrop
+    }
+
     return (
       <div>
-        <h1>Example 2 - Gallery</h1>
-        <Files
-          ref='files'
-          className='files-dropzone-gallery'
-          onChange={this.onFilesChange}
-          onError={this.onFilesError}
-          accepts={['image/*']}
-          multiple
-          clickable={false}
-        >
-          {
-            this.state.files.length > 0
-            ? <div className='files-gallery'>
-              {this.state.files.map((file) =>
-                <img className='files-gallery-item' src={file.preview.url} key={file.id} />
-              )}
-            </div>
-            : <div>Drop images here</div>
+        <input
+          {...inputAttributes}
+        />
+        <div className={this.props.className}
+          onClick={
+            this.props.clickable === true
+              ? this.openFileChooser
+              : null
           }
-        </Files>
-        <button onClick={this.filesRemoveAll}>Remove All Files</button>
+          onDrop={this.onDrop}
+          onDragOver={this.onDragOver}
+          onDragEnter={this.onDragEnter}
+          onDragLeave={this.onDragLeave}
+        >
+          {this.props.children}
+        </div>
       </div>
     )
   }
-})
+}
 
-ReactDOM.render(<div><FilesDemo1 /><FilesDemo2 /></div>, document.getElementById('container'))
+Files.propTypes = {
+  children: React.PropTypes.oneOfType([
+    React.PropTypes.arrayOf(React.PropTypes.node),
+    React.PropTypes.node
+  ]),
+  className: React.PropTypes.string.isRequired,
+  dropActiveClassName: React.PropTypes.string,
+  onChange: React.PropTypes.func,
+  onError: React.PropTypes.func,
+  accepts: React.PropTypes.array,
+  multiple: React.PropTypes.bool,
+  maxFiles: React.PropTypes.number,
+  maxFileSize: React.PropTypes.number,
+  minFileSize: React.PropTypes.number,
+  clickable: React.PropTypes.bool
+}
+
+Files.defaultProps = {
+  onChange: function (files) {
+    console.log(files)
+  },
+  onError: function (error, file) {
+    console.log('error code ' + error.code + ': ' + error.message)
+  },
+  className: 'files-dropzone',
+  dropActiveClassName: 'files-dropzone-active',
+  accepts: null,
+  multiple: true,
+  maxFiles: Infinity,
+  maxFileSize: Infinity,
+  minFileSize: 0,
+  clickable: true
+}
+
+export default Files
