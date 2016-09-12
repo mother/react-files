@@ -66,6 +66,13 @@ See "Tinker" instructions below to run and view all examples.
 ```
 git clone https://github.com/mother/react-files
 npm install
+```
+And since React is just a peer dependency:
+```
+npm install react
+```
+Then:
+```
 npm run dev
 ```
 
