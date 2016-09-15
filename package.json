@@ -4,6 +4,7 @@
   "main": "dist/index.js",
   "description": "A file input (dropzone) management component for React",
   "scripts": {
+    "preinstall": "rm -rf dist && webpack",
     "build": "rm -rf dist && webpack",
     "dev": "node server.js",
     "test": "mocha --compilers js:babel-core/register --recursive test/test.js",
