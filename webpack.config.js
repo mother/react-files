@@ -1,4 +1,5 @@
-var path = require('path')
+const path = require('path')
+const webpack = require('webpack')
 
 module.exports = {
   entry: './src/index.js',
@@ -8,7 +9,11 @@ module.exports = {
     libraryTarget: 'umd',
     publicPath: '/static/'
   },
-  plugins: [],
+  plugins: [
+    new webpack.optimize.UglifyJsPlugin({
+      compress: { warnings: false }
+    })
+  ],
   externals: {
     'react': 'react'
   },
