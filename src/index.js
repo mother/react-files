@@ -221,7 +221,7 @@ class Files extends React.Component {
           onDragOver={this.onDragOver}
           onDragEnter={this.onDragEnter}
           onDragLeave={this.onDragLeave}
-          {...this.props}
+          style={this.props.style}
         >
           {this.props.children}
         </div>
@@ -244,7 +244,8 @@ Files.propTypes = {
   maxFiles: React.PropTypes.number,
   maxFileSize: React.PropTypes.number,
   minFileSize: React.PropTypes.number,
-  clickable: React.PropTypes.bool
+  clickable: React.PropTypes.bool,
+  style: React.PropTypes.object
 }
 
 Files.defaultProps = {
