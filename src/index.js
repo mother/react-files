@@ -210,7 +210,8 @@ class Files extends React.Component {
         <input
           {...inputAttributes}
         />
-        <div className={this.props.className}
+        <div
+          className={this.props.className}
           onClick={
             this.props.clickable === true
               ? this.openFileChooser
@@ -220,6 +221,7 @@ class Files extends React.Component {
           onDragOver={this.onDragOver}
           onDragEnter={this.onDragEnter}
           onDragLeave={this.onDragLeave}
+          {...this.props}
         >
           {this.props.children}
         </div>

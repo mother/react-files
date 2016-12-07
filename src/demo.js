@@ -40,6 +40,7 @@ var FilesDemo1 = React.createClass({
         <Files
           ref='files'
           className='files-dropzone-list'
+          style={{ height: '100px' }}
           onChange={this.onFilesChange}
           onError={this.onFilesError}
           multiple
