@@ -82,13 +82,13 @@ class Files extends React.Component {
   }
 
   onDragEnter (event) {
-    let el = this.refs.dropzone
+    let el = this.dropzone
     el.className += ' ' + this.props.dropActiveClassName
   }
 
   onDragLeave (event) {
-    let el = this.refs.dropzone
-    el.className = el.className.replace(' ' + this.props.dropActiveClassName, '')
+    let el = this.dropzone
+    this.dropzone.className = el.className.replace(' ' + this.props.dropActiveClassName, '')
   }
 
   openFileChooser () {
@@ -221,7 +221,7 @@ class Files extends React.Component {
           onDragOver={this.onDragOver}
           onDragEnter={this.onDragEnter}
           onDragLeave={this.onDragLeave}
-          ref='dropzone'
+          ref={dropzone => { this.dropzone = dropzone }}
           style={this.props.style}
         >
           {this.props.children}
