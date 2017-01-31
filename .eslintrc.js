@@ -7,5 +7,8 @@ module.exports = {
     "plugins": [
         "standard",
         "promise"
-    ]
+    ],
+    "rules": {
+      "react/jsx-no-bind": 0
+    }
 }
