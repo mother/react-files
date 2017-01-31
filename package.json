@@ -1,6 +1,6 @@
 {
   "name": "react-files",
-  "version": "2.3.2",
+  "version": "2.3.3",
   "main": "dist/index.js",
   "description": "A file input (dropzone) management component for React",
   "scripts": {

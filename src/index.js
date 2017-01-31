@@ -82,12 +82,12 @@ class Files extends React.Component {
   }
 
   onDragEnter (event) {
-    let el = document.getElementsByClassName(this.props.className)[0]
+    let el = this.refs.dropzone
     el.className += ' ' + this.props.dropActiveClassName
   }
 
   onDragLeave (event) {
-    let el = document.getElementsByClassName(this.props.className)[0]
+    let el = this.refs.dropzone
     el.className = el.className.replace(' ' + this.props.dropActiveClassName, '')
   }
 
@@ -221,6 +221,7 @@ class Files extends React.Component {
           onDragOver={this.onDragOver}
           onDragEnter={this.onDragEnter}
           onDragLeave={this.onDragLeave}
+          ref='dropzone'
           style={this.props.style}
         >
           {this.props.children}
