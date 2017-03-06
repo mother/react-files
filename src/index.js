@@ -198,6 +198,7 @@ class Files extends React.Component {
       type: 'file',
       accept: this.props.accepts ? this.props.accepts.join() : '',
       multiple: this.props.multiple,
+      name: this.props.name,
       style: { display: 'none' },
       ref: (element) => {
         this.inputElement = element
@@ -246,6 +247,7 @@ Files.propTypes = {
   maxFileSize: React.PropTypes.number,
   minFileSize: React.PropTypes.number,
   clickable: React.PropTypes.bool,
+  name: React.PropTypes.string,
   style: React.PropTypes.object
 }
 
@@ -263,6 +265,7 @@ Files.defaultProps = {
   maxFiles: Infinity,
   maxFileSize: Infinity,
   minFileSize: 0,
+  name: 'file',
   clickable: true
 }
 
