@@ -2,38 +2,39 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import Files from './'
 
-var FilesDemo1 = React.createClass({
-  getInitialState () {
-    return {
+class FilesDemo1 extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
       files: []
     }
-  },
+  }
 
-  onFilesChange: function (files) {
+  onFilesChange = (files) => {
     this.setState({
       files
     }, () => {
       console.log(this.state.files)
     })
-  },
+  }
 
-  onFilesError: function (error, file) {
+  onFilesError = (error, file) => {
     console.log('error code ' + error.code + ': ' + error.message)
-  },
+  }
 
-  filesRemoveOne: function (file) {
+  filesRemoveOne = (file) => {
     this.refs.files.removeFile(file)
-  },
+  }
 
-  filesRemoveAll: function () {
+  filesRemoveAll = () => {
     this.refs.files.removeFiles()
-  },
+  }
 
-  filesUpload: function () {
+  filesUpload = () => {
     window.alert('Ready to upload ' + this.state.files.length + ' file(s)!')
-  },
+  }
 
-  render: function () {
+  render () {
     return (
       <div>
         <h1>Example 1 - List</h1>
@@ -80,32 +81,33 @@ var FilesDemo1 = React.createClass({
       </div>
     )
   }
-})
+}
 
-var FilesDemo2 = React.createClass({
-  getInitialState () {
-    return {
+class FilesDemo2 extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
       files: []
     }
-  },
+  }
 
-  onFilesChange: function (files) {
+  onFilesChange = (files) => {
     this.setState({
       files
     }, () => {
       console.log(this.state.files)
     })
-  },
+  }
 
-  onFilesError: function (error, file) {
+  onFilesError = (error, file) => {
     console.log('error code ' + error.code + ': ' + error.message)
-  },
+  }
 
-  filesRemoveAll: function () {
+  filesRemoveAll = () => {
     this.refs.files.removeFiles()
-  },
+  }
 
-  render: function () {
+  render () {
     return (
       <div>
         <h1>Example 2 - Gallery</h1>
@@ -132,6 +134,6 @@ var FilesDemo2 = React.createClass({
       </div>
     )
   }
-})
+}
 
 ReactDOM.render(<div><FilesDemo1 /><FilesDemo2 /></div>, document.getElementById('container'))
