@@ -56,8 +56,5 @@
     "sinon": "1.17.5",
     "webpack": "1.12.2",
     "webpack-dev-server": "1.12.1"
-  },
-  "dependencies": {
-    "react": "15.6.1"
   }
 }
