@@ -1,6 +1,6 @@
 {
   "name": "react-files",
-  "version": "2.4.2",
+  "version": "2.4.3",
   "main": "dist/index.js",
   "description": "A file input (dropzone) management component for React",
   "scripts": {
@@ -9,7 +9,9 @@
     "test": "mocha --compilers js:babel-core/register --recursive test/test.js",
     "test:watch": "mocha --compilers js:babel-core/register --recursive test/test.js --watch --reporter min"
   },
-  "files": ["dist/index.js"],
+  "files": [
+    "dist/index.js"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/mother/react-files.git"
@@ -23,7 +25,7 @@
     "input",
     "dropzone"
   ],
-  "author": "Jared Reich",
+  "author": "Mother Co",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/mother/react-files/issues"
@@ -46,6 +48,7 @@
     "eslint-plugin-standard": "2.0.0",
     "jsdom": "9.4.2",
     "mocha": "3.0.2",
+    "prop-types": "15.5.10",
     "react": "0.14.6",
     "react-addons-test-utils": "15.3.1",
     "react-dom": "0.14.8",

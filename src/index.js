@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 class Files extends React.Component {
   constructor (props, context) {
@@ -233,22 +234,22 @@ class Files extends React.Component {
 }
 
 Files.propTypes = {
-  children: React.PropTypes.oneOfType([
-    React.PropTypes.arrayOf(React.PropTypes.node),
-    React.PropTypes.node
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
   ]),
-  className: React.PropTypes.string.isRequired,
-  dropActiveClassName: React.PropTypes.string,
-  onChange: React.PropTypes.func,
-  onError: React.PropTypes.func,
-  accepts: React.PropTypes.array,
-  multiple: React.PropTypes.bool,
-  maxFiles: React.PropTypes.number,
-  maxFileSize: React.PropTypes.number,
-  minFileSize: React.PropTypes.number,
-  clickable: React.PropTypes.bool,
-  name: React.PropTypes.string,
-  style: React.PropTypes.object
+  className: PropTypes.string.isRequired,
+  dropActiveClassName: PropTypes.string,
+  onChange: PropTypes.func,
+  onError: PropTypes.func,
+  accepts: PropTypes.array,
+  multiple: PropTypes.bool,
+  maxFiles: PropTypes.number,
+  maxFileSize: PropTypes.number,
+  minFileSize: PropTypes.number,
+  clickable: PropTypes.bool,
+  name: PropTypes.string,
+  style: PropTypes.object
 }
 
 Files.defaultProps = {
