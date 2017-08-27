@@ -1,3 +1,6 @@
+import axios from 'axios'
+import Blob from 'blob'
+import FormData from 'form-data'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Files from './'
@@ -31,7 +34,15 @@ class FilesDemo1 extends React.Component {
   }
 
   filesUpload = () => {
-    window.alert('Ready to upload ' + this.state.files.length + ' file(s)!')
+    const formData = new FormData()
+    Object.keys(this.state.files).forEach((key) => {
+      const file = this.state.files[key]
+      formData.append(key, new Blob([file], { type: file.type }), file.name || 'file')
+    })
+
+    axios.post(`/files`, formData)
+    .then(response => window.alert(`${this.state.files.length} files uploaded succesfully!`))
+    .catch(err => window.alert('Error uploading files :('))
   }
 
   render () {
