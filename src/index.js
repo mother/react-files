@@ -116,6 +116,16 @@ class Files extends React.Component {
             }
           }
         }
+      } else {
+        for (let i = 0; i < accepts.length; i++) {
+          let accept = accepts[i];
+          if (accept.match(/\.[a-z0-9]*$/)) {
+            const ext = accept.substr(1);
+            if (file.extension && file.extension === ext) {
+              return true
+            }
+          }
+        }
       }
       this.onError({
         code: 1,
