@@ -1,6 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+const mimeTypeRegexp = /^(application|audio|example|image|message|model|multipart|text|video)\/[a-z0-9\.\+\*-]+$/;
+const extRegexp = /\.[a-z0-9]*$/;
+
 class Files extends React.Component {
   constructor (props, context) {
     super(props, context)
@@ -98,43 +101,40 @@ class Files extends React.Component {
   }
 
   fileTypeAcceptable (file) {
-    let accepts = this.props.accepts
-    if (accepts) {
-      if (file.type) {
+    let accepts = this.props.accepts;
+    if (!accepts) {
+      return true
+    }
+
+    const result = accepts.some(accept => {
+      if (file.type && accept.match(mimeTypeRegexp)) {
         let typeLeft = this.mimeTypeLeft(file.type)
         let typeRight = this.mimeTypeRight(file.type)
-        for (let i = 0; i < accepts.length; i++) {
-          let accept = accepts[i]
-          let acceptLeft = accept.split('/')[0]
-          let acceptRight = accept.split('/')[1]
-          if (acceptLeft && acceptRight) {
-            if (acceptLeft === typeLeft && acceptRight === '*') {
-              return true
-            }
-            if (acceptLeft === typeLeft && acceptRight === typeRight) {
-              return true
-            }
+        let acceptLeft = accept.split('/')[0]
+        let acceptRight = accept.split('/')[1]
+        if (acceptLeft && acceptRight) {
+          if (acceptLeft === typeLeft && acceptRight === '*') {
+            return true
+          }
+          if (acceptLeft === typeLeft && acceptRight === typeRight) {
+            return true
           }
         }
-      } else {
-        for (let i = 0; i < accepts.length; i++) {
-          let accept = accepts[i];
-          if (accept.match(/\.[a-z0-9]*$/)) {
-            const ext = accept.substr(1);
-            if (file.extension && file.extension === ext) {
-              return true
-            }
-          }
-        }
+      } else if (file.extension && accept.match(extRegexp)) {
+        const ext = accept.substr(1);
+        return file.extension === ext
       }
+      return false
+    });
+
+    if (!result) {
       this.onError({
         code: 1,
         message: file.name + ' is not a valid file type'
       }, file)
-      return false
-    } else {
-      return true
     }
+
+    return result
   }
 
   fileSizeAcceptable (file) {
