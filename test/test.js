@@ -1,6 +1,5 @@
 import React from 'react'
 import { mount } from 'enzyme'
-// import sinon from 'sinon'
 import { expect } from 'chai'
 import { describe, it } from 'mocha'
 
