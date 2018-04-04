@@ -1,16 +1,17 @@
 import React from 'react'
-import { mount } from 'enzyme'
-// import sinon from 'sinon'
+import Enzyme, { mount } from 'enzyme'
+import EnzymeAdapter from 'enzyme-adapter-react-16'
 import { expect } from 'chai'
 import { describe, it } from 'mocha'
+import Files from '../src'
+
+Enzyme.configure({ adapter: new EnzymeAdapter() })
 
 // Add DOM environment
 import jsdom from 'jsdom'
 const doc = jsdom.jsdom('<!doctype html><html><body></body></html>')
 global.document = doc
 global.window = doc.defaultView
-
-import Files from '../src/Files'
 
 describe('<Files />', () => {
   it('allows us to set props', () => {
@@ -33,7 +34,7 @@ describe('<Files />', () => {
 
   it('allows us to set a class name', () => {
     const wrapper = mount(<Files className='files-dropzone' />)
-    expect(wrapper.find('.files-dropzone').hasClass('files-dropzone')).to.equal(true)
+    expect(wrapper.find('div.files-dropzone')).to.have.length(1)
   })
 
   it('allows us to set the "dropActiveClassName" prop', () => {
