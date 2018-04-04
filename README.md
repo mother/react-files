@@ -40,7 +40,7 @@ var FilesDemo = React.createClass({
           className='files-dropzone'
           onChange={this.onFilesChange}
           onError={this.onFilesError}
-          accepts={['image/png', 'text/plain', 'audio/*']}
+          accepts={['image/png', '.pdf', 'audio/*']}
           multiple
           maxFiles={3}
           maxFileSize={10000000}
@@ -108,13 +108,13 @@ Error codes are:
 
 `accepts` - *Array* of *String*
 
-Control what types of generic/specific MIME types, can be dropped/added.
+Control what types of generic/specific MIME types or file extensions can be dropped/added.
 
 > See full list of MIME types here: http://www.iana.org/assignments/media-types/media-types.xhtml
 
 Example:
 ```js
-accepts={['image/*', 'video/mp4', 'audio/*']}
+accepts={['image/*', 'video/mp4', 'audio/*', '.pdf']}
 ```
 
 ---
