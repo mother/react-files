@@ -9,6 +9,7 @@ module.exports = {
       path: path.resolve(__dirname, 'dist'),
       filename: 'index.js',
       libraryTarget: 'umd',
+      // Workaround until https://github.com/webpack/webpack/issues/6525 is adddressed
       globalObject: 'this'
    },
    externals: {
