@@ -34,7 +34,7 @@
   },
   "homepage": "https://github.com/mother/react-files",
   "peerDependencies": {
-    "react": "^15.0.0"
+    "react": "^15.0.0 || ^16"
   },
   "devDependencies": {
     "@babel/core": "7.0.0-beta.44",
