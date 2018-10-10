@@ -51,6 +51,7 @@ class FilesDemo1 extends React.Component {
         <h1>Example 1 - List</h1>
         <Files
           ref='files'
+          containerClassName="files-dropzone-list-container"
           className='files-dropzone-list'
           style={{ height: '100px' }}
           onChange={this.onFilesChange}
@@ -124,6 +125,7 @@ class FilesDemo2 extends React.Component {
         <h1>Example 2 - Gallery</h1>
         <Files
           ref='files'
+          containerClassName="files-dropzone-gallery-container"
           className='files-dropzone-gallery'
           onChange={this.onFilesChange}
           onError={this.onFilesError}

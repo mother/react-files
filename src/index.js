@@ -218,7 +218,7 @@ class Files extends React.Component {
     }
 
     return (
-      <div>
+      <div className={this.props.containerClassName}>
         <input
           {...inputAttributes}
         />
@@ -248,6 +248,7 @@ Files.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node
   ]),
+  containerClassName: PropTypes.string,
   className: PropTypes.string.isRequired,
   dropActiveClassName: PropTypes.string,
   onChange: PropTypes.func,
@@ -269,6 +270,7 @@ Files.defaultProps = {
   onError: function (error, file) {
     console.log('error code ' + error.code + ': ' + error.message)
   },
+  containerClassName: 'files-dropzone-container',
   className: 'files-dropzone',
   dropActiveClassName: 'files-dropzone-active',
   accepts: null,
