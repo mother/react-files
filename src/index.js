@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 const mimeTypeRegexp = /^(application|audio|example|image|message|model|multipart|text|video)\/[a-z0-9\.\+\*-]+$/;
-const extRegexp = /\.[a-z0-9]*$/;
+const extRegexp = /\.[a-z0-9]*$i/;
 
 class Files extends React.Component {
   constructor (props, context) {
@@ -122,7 +122,7 @@ class Files extends React.Component {
         }
       } else if (file.extension && accept.match(extRegexp)) {
         const ext = accept.substr(1);
-        return file.extension === ext
+        return file.extension.toLowerCase() === ext.toLowerCase();
       }
       return false
     });
