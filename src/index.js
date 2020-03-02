@@ -173,14 +173,14 @@ class Files extends React.Component {
   }
 
   fileSizeReadable (size) {
-    if (size >= 1000000000) {
-      return Math.ceil(size / 1000000000) + 'GB'
-    } else if (size >= 1000000) {
-      return Math.ceil(size / 1000000) + 'MB'
-    } else if (size >= 1000) {
-      return Math.ceil(size / 1000) + 'kB'
+    if (size >= 1073741824) {
+        return Math.ceil(size / 1073741824) + 'GB'
+    } else if (size >= 1048576) {
+        return Math.ceil(size / 1048576) + 'MB'
+    } else if (size >= 1024) {
+        return Math.ceil(size / 1024) + 'kB'
     } else {
-      return Math.ceil(size) + 'B'
+        return Math.ceil(size) + 'B'
     }
   }
 
