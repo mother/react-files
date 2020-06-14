@@ -3,7 +3,7 @@ import Blob from 'blob'
 import FormData from 'form-data'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Files from './'
+import Files from '../src'
 
 class FilesDemo1 extends React.Component {
   constructor (props) {
@@ -26,11 +26,11 @@ class FilesDemo1 extends React.Component {
   }
 
   filesRemoveOne = (file) => {
-    this.refs.files.removeFile(file)
+    // this.refs.files.removeFile(file)
   }
 
   filesRemoveAll = () => {
-    this.refs.files.removeFiles()
+    // this.refs.files.removeFiles()
   }
 
   filesUpload = () => {
@@ -50,7 +50,7 @@ class FilesDemo1 extends React.Component {
       <div>
         <h1>Example 1 - List</h1>
         <Files
-          ref='files'
+          // ref='files'
           className='files-dropzone-list'
           style={{ height: '100px' }}
           onChange={this.onFilesChange}
@@ -115,7 +115,7 @@ class FilesDemo2 extends React.Component {
   }
 
   filesRemoveAll = () => {
-    this.refs.files.removeFiles()
+    // this.refs.files.removeFiles()
   }
 
   render () {
@@ -123,7 +123,7 @@ class FilesDemo2 extends React.Component {
       <div>
         <h1>Example 2 - Gallery</h1>
         <Files
-          ref='files'
+          // ref='files'
           className='files-dropzone-gallery'
           onChange={this.onFilesChange}
           onError={this.onFilesError}

@@ -1,117 +1,65 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 
+// TODO: SUPPORT */*
+// See: https://github.com/mother/react-files/issues/27
 const mimeTypeRegexp = /^(application|audio|example|image|message|model|multipart|text|video)\/[a-z0-9\.\+\*-]+$/;
 const extRegexp = /\.[a-zA-Z0-9]*$/;
 
-class Files extends React.Component {
-  constructor (props, context) {
-    super(props, context)
-    this.onDrop = this.onDrop.bind(this)
-    this.onDragEnter = this.onDragEnter.bind(this)
-    this.onDragLeave = this.onDragLeave.bind(this)
-    this.openFileChooser = this.openFileChooser.bind(this)
+const Files = ({
+   accepts,
+   children,
+   className,
+   clickable,
+   dropActiveClassName,
+   onChange,
+   onError,
+   multiple,
+   maxFiles,
+   maxFileSize,
+   minFileSize,
+   name,
+   style
+}) => {
+  const idCounter = useRef(1)
+  const [files, setFiles] = useState([])
+  const dropzoneElement = useRef()
+  const inputElement = useRef()
 
-    this.id = 1
-
-    this.state = {
-      files: []
-    }
+  const handleError = (error, file) => {
+    onError(error, file)
   }
 
-  onDrop (event) {
-    event.preventDefault()
-    this.onDragLeave(event)
-
-    // Collect added files, perform checking, cast pseudo-array to Array,
-    // then return to method
-    let filesAdded = event.dataTransfer ? event.dataTransfer.files : event.target.files
-
-    // Multiple files dropped when not allowed
-    if (this.props.multiple === false && filesAdded.length > 1) {
-      filesAdded = [filesAdded[0]]
-    }
-
-    let files = []
-    for (let i = 0; i < filesAdded.length; i++) {
-      let file = filesAdded[i]
-
-      // Assign file an id
-      file.id = 'files-' + this.id++
-
-      // Tell file it's own extension
-      file.extension = this.fileExtension(file)
-
-      // Tell file it's own readable size
-      file.sizeReadable = this.fileSizeReadable(file.size)
-
-      // Add preview, either image or file extension
-      if (file.type && this.mimeTypeLeft(file.type) === 'image') {
-        file.preview = {
-          type: 'image',
-          url: window.URL.createObjectURL(file)
-        }
-      } else {
-        file.preview = {
-          type: 'file'
-        }
-      }
-
-      // Check for file max limit
-      if (this.state.files.length + files.length >= this.props.maxFiles) {
-        this.onError({
-          code: 4,
-          message: 'maximum file count reached'
-        }, file)
-        break
-      }
-
-      // If file is acceptable, push or replace
-      if (this.fileTypeAcceptable(file) && this.fileSizeAcceptable(file)) {
-        files.push(file)
-      }
-    }
-    this.setState({
-      files: this.props.multiple === false
-        ? files
-        : [...this.state.files, ...files]
-    }, () => {
-      this.props.onChange.call(this, this.state.files)
-    })
-  }
-
-  onDragOver (event) {
+  const handleDragOver = (event) => {
     event.preventDefault()
     event.stopPropagation()
   }
 
-  onDragEnter (event) {
-    let el = this.dropzone
-    el.className += ' ' + this.props.dropActiveClassName
+  const handleDragEnter = (event) => {
+    const el = dropzoneElement.current
+    el.className += ' ' + dropActiveClassName
   }
 
-  onDragLeave (event) {
-    let el = this.dropzone
-    this.dropzone.className = el.className.replace(' ' + this.props.dropActiveClassName, '')
+  const handleDragLeave = (event) => {
+    const el = dropzoneElement.current
+    dropzoneElement.current.className = el.className.replace(' ' + dropActiveClassName, '')
   }
 
-  openFileChooser () {
-    this.inputElement.value = null
-    this.inputElement.click()
+  const openFileChooser = () => {
+    inputElement.current.value = null
+    inputElement.current.click()
   }
 
-  fileTypeAcceptable (file) {
-    let accepts = this.props.accepts;
+  const fileTypeAcceptable = (file) => {
     if (!accepts) {
       return true
     }
 
     const result = accepts.some(accept => {
       if (file.type && accept.match(mimeTypeRegexp)) {
-        let typeLeft = this.mimeTypeLeft(file.type)
-        let typeRight = this.mimeTypeRight(file.type)
-        let acceptLeft = accept.split('/')[0]
-        let acceptRight = accept.split('/')[1]
+        const [typeLeft, typeRight] = file.type.split('/')
+        const [acceptLeft, acceptRight] = accept.split('/')
+
         if (acceptLeft && acceptRight) {
           if (acceptLeft === typeLeft && acceptRight === '*') {
             return true
@@ -125,10 +73,10 @@ class Files extends React.Component {
         return file.extension.toLowerCase() === ext.toLowerCase();
       }
       return false
-    });
+    })
 
     if (!result) {
-      this.onError({
+      handleError({
         code: 1,
         message: file.name + ' is not a valid file type'
       }, file)
@@ -137,15 +85,15 @@ class Files extends React.Component {
     return result
   }
 
-  fileSizeAcceptable (file) {
-    if (file.size > this.props.maxFileSize) {
-      this.onError({
+  const fileSizeAcceptable = (file) => {
+    if (file.size > maxFileSize) {
+      handleError({
         code: 2,
         message: file.name + ' is too large'
       }, file)
       return false
-    } else if (file.size < this.props.minFileSize) {
-      this.onError({
+    } else if (file.size < minFileSize) {
+      handleError({
         code: 3,
         message: file.name + ' is too small'
       }, file)
@@ -155,15 +103,7 @@ class Files extends React.Component {
     }
   }
 
-  mimeTypeLeft (mime) {
-    return mime.split('/')[0]
-  }
-
-  mimeTypeRight (mime) {
-    return mime.split('/')[1]
-  }
-
-  fileExtension (file) {
+  const fileExtension = (file) => {
     let extensionSplit = file.name.split('.')
     if (extensionSplit.length > 1) {
       return extensionSplit[extensionSplit.length - 1]
@@ -172,7 +112,7 @@ class Files extends React.Component {
     }
   }
 
-  fileSizeReadable (size) {
+  const fileSizeReadable = (size) => {
     if (size >= 1000000000) {
       return Math.ceil(size / 1000000000) + 'GB'
     } else if (size >= 1000000) {
@@ -184,63 +124,107 @@ class Files extends React.Component {
     }
   }
 
-  onError (error, file) {
-    this.props.onError.call(this, error, file)
-  }
+  const handleDrop = (event) => {
+     event.preventDefault()
+     handleDragLeave(event)
 
-  removeFile (fileToRemove) {
-    this.setState({
-      files: this.state.files.filter(file => file.id !== fileToRemove.id)
-    }, () => {
-      this.props.onChange.call(this, this.state.files)
-    })
-  }
+     // Collect added files, perform checking, cast pseudo-array to Array,
+     // then return to method
+     let filesAdded = event.dataTransfer ? event.dataTransfer.files : event.target.files
 
-  removeFiles () {
-    this.setState({
-      files: []
-    }, () => {
-      this.props.onChange.call(this, this.state.files)
-    })
-  }
+     // Multiple files dropped when not allowed
+     if (multiple === false && filesAdded.length > 1) {
+      filesAdded = [filesAdded[0]]
+     }
 
-  render () {
-    const inputAttributes = {
-      type: 'file',
-      accept: this.props.accepts ? this.props.accepts.join() : '',
-      multiple: this.props.multiple,
-      name: this.props.name,
-      style: { display: 'none' },
-      ref: (element) => {
-        this.inputElement = element
-      },
-      onChange: this.onDrop
-    }
+     let droppedFiles = []
+     for (let i = 0; i < filesAdded.length; i++) {
+      let file = filesAdded[i]
+
+      // Assign file an id
+      file.id = 'files-' + idCounter.current++
+
+      // Tell file it's own extension
+      file.extension = fileExtension(file)
+
+      // Tell file it's own readable size
+      file.sizeReadable = fileSizeReadable(file.size)
+
+      // Add preview, either image or file extension
+      if (file.type && file.type.split('/')[0] === 'image') {
+         file.preview = {
+          type: 'image',
+          url: window.URL.createObjectURL(file)
+         }
+      } else {
+         file.preview = {
+          type: 'file'
+         }
+      }
+
+      // Check for file max limit
+      if (files.length + droppedFiles.length >= maxFiles) {
+         handleError({
+          code: 4,
+          message: 'maximum file count reached'
+         }, file)
+         break
+      }
+
+      // If file is acceptable, push or replace
+      if (fileTypeAcceptable(file) && fileSizeAcceptable(file)) {
+         droppedFiles.push(file)
+      }
+     }
+
+     const newFiles = multiple
+      ? [...files, ...droppedFiles]
+      : droppedFiles
+
+     setFiles(newFiles)
+     onChange(newFiles)
+ }
+
+  // removeFile (fileToRemove) {
+  //   this.setState({
+  //     files: this.state.files.filter(file => file.id !== fileToRemove.id)
+  //   }, () => {
+  //     this.props.onChange.call(this, this.state.files)
+  //   })
+  // }
+  //
+  // removeFiles () {
+  //   this.setState({
+  //     files: []
+  //   }, () => {
+  //     this.props.onChange.call(this, this.state.files)
+  //   })
+  // }
 
     return (
       <div>
         <input
-          {...inputAttributes}
+          ref={inputElement}
+          type="file"
+          accept={accepts ? accepts.join() : ''}
+          multiple={multiple}
+          name={name}
+          style={{ display: 'none' }}
+          onChange={handleDrop}
         />
         <div
-          className={this.props.className}
-          onClick={
-            this.props.clickable === true
-              ? this.openFileChooser
-              : null
-          }
-          onDrop={this.onDrop}
-          onDragOver={this.onDragOver}
-          onDragEnter={this.onDragEnter}
-          onDragLeave={this.onDragLeave}
-          ref={dropzone => { this.dropzone = dropzone }}
-          style={this.props.style}
-        >
-          {this.props.children}
+          ref={dropzoneElement}
+          className={className}
+          onClick={clickable === true ? openFileChooser : null}
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+          onDragEnter={handleDragEnter}
+          onDragLeave={handleDragLeave}
+          style={style}>
+          {children}
         </div>
       </div>
     )
-  }
 }
 
 Files.propTypes = {
