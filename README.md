@@ -42,7 +42,6 @@ var FilesDemo = React.createClass({
           onError={this.onFilesError}
           accepts={['image/png', '.pdf', 'audio/*']}
           multiple
-          maxFiles={3}
           maxFileSize={10000000}
           minFileSize={0}
           clickable
@@ -159,7 +158,7 @@ Minimum file size allowed (in bytes)
 
 ---
 
-`dropActiveClassName` - *String*
+`dragActiveClassName` - *String*
 
 Default: `'files-dropzone-active'`
 

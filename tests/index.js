@@ -37,9 +37,9 @@ describe('<Files />', () => {
     expect(wrapper.find('div.files-dropzone')).to.have.length(1)
   })
 
-  it('allows us to set the "dropActiveClassName" prop', () => {
-    const wrapper = mount(<Files dropActiveClassName={'files-dropzone-active'} />)
-    expect(wrapper.props().dropActiveClassName).to.equal('files-dropzone-active')
+  it('allows us to set the "dragActiveClassName" prop', () => {
+    const wrapper = mount(<Files dragActiveClassName={'files-dropzone-active'} />)
+    expect(wrapper.props().dragActiveClassName).to.equal('files-dropzone-active')
   })
 
   it('allows us to call the "onChange" method prop', () => {

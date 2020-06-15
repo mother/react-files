@@ -6,8 +6,8 @@
   "scripts": {
     "build": "rm -rf dist && webpack --config config/webpack.build.config.js",
     "demo": "node demo/server.js",
-    "test": "mocha --require @babel/register --recursive test/test.js",
-    "test:watch": "mocha --require @babel/register --recursive test/test.js --watch --reporter min",
+    "test": "mocha --require @babel/register --recursive tests/index.js",
+    "test:watch": "mocha --require @babel/register --recursive tests/index.js --watch --reporter min",
     "webpack-analyze": "mkdir -p .tmp; NODE_ENV=production webpack --config config/webpack.build.config.js --profile --json > .tmp/stats.json; webpack-bundle-analyzer .tmp/stats.json"
   },
   "files": [

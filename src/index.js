@@ -11,7 +11,8 @@ const Files = ({
    children,
    className,
    clickable,
-   dropActiveClassName,
+   dragActiveClassName,
+   dragActiveStyle,
    onChange,
    onError,
    multiple,
@@ -22,7 +23,6 @@ const Files = ({
    style
 }) => {
   const idCounter = useRef(1)
-  const [files, setFiles] = useState([])
   const dropzoneElement = useRef()
   const inputElement = useRef()
 
@@ -37,12 +37,12 @@ const Files = ({
 
   const handleDragEnter = (event) => {
     const el = dropzoneElement.current
-    el.className += ' ' + dropActiveClassName
+    el.className += ' ' + dragActiveClassName
   }
 
   const handleDragLeave = (event) => {
     const el = dropzoneElement.current
-    dropzoneElement.current.className = el.className.replace(' ' + dropActiveClassName, '')
+    dropzoneElement.current.className = el.className.replace(' ' + dragActiveClassName, '')
   }
 
   const openFileChooser = () => {
@@ -163,10 +163,10 @@ const Files = ({
       }
 
       // Check for file max limit
-      if (files.length + droppedFiles.length >= maxFiles) {
+      if (droppedFiles.length >= maxFiles) {
          handleError({
-          code: 4,
-          message: 'maximum file count reached'
+            code: 4,
+            message: 'maximum file count reached'
          }, file)
          break
       }
@@ -177,32 +177,11 @@ const Files = ({
       }
      }
 
-     const newFiles = multiple
-      ? [...files, ...droppedFiles]
-      : droppedFiles
-
-     setFiles(newFiles)
-     onChange(newFiles)
+     onChange(droppedFiles)
  }
 
-  // removeFile (fileToRemove) {
-  //   this.setState({
-  //     files: this.state.files.filter(file => file.id !== fileToRemove.id)
-  //   }, () => {
-  //     this.props.onChange.call(this, this.state.files)
-  //   })
-  // }
-  //
-  // removeFiles () {
-  //   this.setState({
-  //     files: []
-  //   }, () => {
-  //     this.props.onChange.call(this, this.state.files)
-  //   })
-  // }
-
     return (
-      <div>
+      <>
         <input
           ref={inputElement}
           type="file"
@@ -223,7 +202,7 @@ const Files = ({
           style={style}>
           {children}
         </div>
-      </div>
+      </>
     )
 }
 
@@ -233,7 +212,7 @@ Files.propTypes = {
     PropTypes.node
   ]),
   className: PropTypes.string.isRequired,
-  dropActiveClassName: PropTypes.string,
+  dragActiveClassName: PropTypes.string,
   onChange: PropTypes.func,
   onError: PropTypes.func,
   accepts: PropTypes.array,
@@ -254,7 +233,7 @@ Files.defaultProps = {
     console.log('error code ' + error.code + ': ' + error.message)
   },
   className: 'files-dropzone',
-  dropActiveClassName: 'files-dropzone-active',
+  dragActiveClassName: 'files-dropzone-active',
   accepts: null,
   multiple: true,
   maxFiles: Infinity,
