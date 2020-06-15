@@ -72,7 +72,7 @@ npm install react
 ```
 Then:
 ```
-npm run dev
+npm run demo
 ```
 
 Then visit http://localhost:8080/
@@ -174,4 +174,4 @@ npm test
 
 ### License
 
-MIT. Copyright (c) 2016 Jared Reich.
+MIT. Copyright (c) Mother Co. 2020
