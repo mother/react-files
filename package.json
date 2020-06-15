@@ -20,7 +20,7 @@
       "post-rewrite": "npm install"
     }
   },
-  "main": [
+  "files": [
     "dist/index.js"
   ],
   "repository": {
