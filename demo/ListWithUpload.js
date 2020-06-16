@@ -37,6 +37,7 @@ const ListWithUpload = () => {
          <h1>Example 1 - List</h1>
          <Files
             className="files-dropzone-list"
+            dragActiveClassName="files-dropzone-active"
             style={{ height: '100px' }}
             onChange={handleChange}
             multiple

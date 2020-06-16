@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import fileExtension from './utils/fileExtension'
 import fileSizeReadable from './utils/fileSizeReadable'
@@ -25,6 +25,7 @@ const Files = ({
    const idCounter = useRef(1)
    const dropzoneElement = useRef()
    const inputElement = useRef()
+   const [isDragging, setDragging] = useState(false)
 
    const handleError = (error, file) => {
       onError(error, file)
@@ -37,7 +38,14 @@ const Files = ({
 
    const handleDragEnter = (event) => {
       const el = dropzoneElement.current
-      el.className = `${el.className} ${dragActiveClassName}`
+      if (dragActiveClassName && !el.className.includes(dragActiveClassName)) {
+         el.className = `${el.className} ${dragActiveClassName}`
+      }
+
+      if (typeof children === 'function') {
+         setDragging(true)
+      }
+
       if (onDragEnter) {
          onDragEnter(event)
       }
@@ -45,7 +53,14 @@ const Files = ({
 
    const handleDragLeave = (event) => {
       const el = dropzoneElement.current
-      el.className = el.className.replace(` ${dragActiveClassName}`, '')
+      if (dragActiveClassName) {
+         el.className = el.className.replace(` ${dragActiveClassName}`, '')
+      }
+
+      if (typeof children === 'function') {
+         setDragging(false)
+      }
+
       if (onDragLeave) {
          onDragLeave(event)
       }
@@ -164,7 +179,7 @@ const Files = ({
             onDragEnter={handleDragEnter}
             onDragLeave={handleDragLeave}
             style={style}>
-            {children}
+            {typeof children === 'function' ? children(isDragging) : children}
          </div>
       </>
    )
@@ -173,6 +188,7 @@ const Files = ({
 Files.propTypes = {
    accepts: PropTypes.array,
    children: PropTypes.oneOfType([
+      PropTypes.func,
       PropTypes.arrayOf(PropTypes.node),
       PropTypes.node
    ]),
@@ -193,9 +209,9 @@ Files.propTypes = {
 
 Files.defaultProps = {
    accepts: null,
-   className: 'files-dropzone',
+   className: undefined,
    clickable: true,
-   dragActiveClassName: 'files-dropzone-active',
+   dragActiveClassName: undefined,
    multiple: true,
    maxFiles: Infinity,
    maxFileSize: Infinity,

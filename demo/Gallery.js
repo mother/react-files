@@ -12,6 +12,7 @@ const Gallery = () => {
          <h1>Example 2 - Gallery</h1>
          <Files
             className="files-dropzone-gallery"
+            dragActiveClassName="files-dropzone-active"
             onChange={handleChange}
             accepts={['image/*']}
             multiple
@@ -21,13 +22,13 @@ const Gallery = () => {
             )}
             {files.length > 0 && (
                <div className="files-gallery">
-                  {files.map((file) =>
+                  {files.map(file => (
                      <img
                         key={file.id}
                         className="files-gallery-item"
                         src={file.preview.url}
                      />
-                  )}
+                  ))}
                </div>
             )}
          </Files>

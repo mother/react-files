@@ -1,11 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import ListWithUpload from './ListWithUpload'
-import Gallery from './Gallery'
+import ListWithUploadExample from './ListWithUpload'
+import GalleryExample from './Gallery'
+import RenderPropsExample from './RenderProps'
 
-ReactDOM.render(
+ReactDOM.render((
    <div>
-      <ListWithUpload />
-      <Gallery />
+      <ListWithUploadExample />
+      <GalleryExample />
+      <RenderPropsExample />
    </div>
-, document.getElementById('container'))
+), document.getElementById('container'))
