@@ -1,11 +1,8 @@
-import React, { useRef } from 'react'
+import React, { useCallback, useRef } from 'react'
 import PropTypes from 'prop-types'
-
-// TODO: SUPPORT */*
-// See: https://github.com/mother/react-files/issues/27
-// eslint-disable-next-line
-const mimeTypeRegexp = /^(application|audio|example|image|message|model|multipart|text|video)\/[a-z0-9\.\+\*-]+$/
-const extRegexp = /\.[a-zA-Z0-9]*$/
+import fileExtension from './utils/fileExtension'
+import fileSizeReadable from './utils/fileSizeReadable'
+import fileTypeAcceptable from './utils/fileTypeAcceptable'
 
 const Files = ({
    accepts,
@@ -15,6 +12,8 @@ const Files = ({
    dragActiveClassName,
    dragActiveStyle,
    onChange,
+   onDragEnter,
+   onDragLeave,
    onError,
    multiple,
    maxFiles,
@@ -31,19 +30,25 @@ const Files = ({
       onError(error, file)
    }
 
-   const handleDragOver = (event) => {
+   const handleDragOver = useCallback((event) => {
       event.preventDefault()
       event.stopPropagation()
-   }
+   }, [])
 
    const handleDragEnter = (event) => {
       const el = dropzoneElement.current
       el.className = `${el.className} ${dragActiveClassName}`
+      if (onDragEnter) {
+         onDragEnter(event)
+      }
    }
 
    const handleDragLeave = (event) => {
       const el = dropzoneElement.current
       el.className = el.className.replace(` ${dragActiveClassName}`, '')
+      if (onDragLeave) {
+         onDragLeave(event)
+      }
    }
 
    const openFileChooser = () => {
@@ -51,99 +56,15 @@ const Files = ({
       inputElement.current.click()
    }
 
-   const fileTypeAcceptable = (file) => {
-      if (!accepts) {
-         return true
-      }
-
-      const result = accepts.some((accept) => {
-         if (file.type && accept.match(mimeTypeRegexp)) {
-            const [typeLeft, typeRight] = file.type.split('/')
-            const [acceptLeft, acceptRight] = accept.split('/')
-
-            if (acceptLeft && acceptRight) {
-               if (acceptLeft === typeLeft && acceptRight === '*') {
-                  return true
-               }
-
-               if (acceptLeft === typeLeft && acceptRight === typeRight) {
-                  return true
-               }
-            }
-         } else if (file.extension && accept.match(extRegexp)) {
-            const ext = accept.substr(1)
-            return file.extension.toLowerCase() === ext.toLowerCase()
-         }
-
-         return false
-      })
-
-      if (!result) {
-         handleError({
-            code: 1,
-            message: `${file.name} is not a valid file type`
-         }, file)
-      }
-
-      return result
-   }
-
-   const fileSizeAcceptable = (file) => {
-      if (file.size > maxFileSize) {
-         handleError({
-            code: 2,
-            message: `${file.name} is too large`
-         }, file)
-
-         return false
-      }
-
-      if (file.size < minFileSize) {
-         handleError({
-            code: 3,
-            message: `${file.name} is too small`
-         }, file)
-
-         return false
-      }
-
-      return true
-   }
-
-   const fileExtension = (file) => {
-      const extensionSplit = file.name.split('.')
-      if (extensionSplit.length > 1) {
-         return extensionSplit[extensionSplit.length - 1]
-      }
-
-      return 'none'
-   }
-
-   /* eslint-disable prefer-template */
-   const fileSizeReadable = (size) => {
-      if (size >= 1000000000) {
-         return Math.ceil(size / 1000000000) + 'GB'
-      }
-
-      if (size >= 1000000) {
-         return Math.ceil(size / 1000000) + 'MB'
-      }
-
-      if (size >= 1000) {
-         return Math.ceil(size / 1000) + 'kB'
-      }
-
-      return Math.ceil(size) + 'B'
-   }
-   /* eslint-enable prefer-template */
-
    const handleDrop = (event) => {
       event.preventDefault()
       handleDragLeave(event)
 
       // Collect added files, perform checking, cast pseudo-array to Array,
       // then return to method
-      let filesAdded = event.dataTransfer ? event.dataTransfer.files : event.target.files
+      let filesAdded = event.dataTransfer
+         ? event.dataTransfer.files
+         : event.target.files
 
       // Multiple files dropped when not allowed
       if (multiple === false && filesAdded.length > 1) {
@@ -176,7 +97,7 @@ const Files = ({
             }
          }
 
-         // Check for file max limit
+         // Check max file count
          if (fileResults.length >= maxFiles) {
             handleError({
                code: 4,
@@ -186,10 +107,37 @@ const Files = ({
             break
          }
 
-         // If file is acceptable, push or replace
-         if (fileTypeAcceptable(file) && fileSizeAcceptable(file)) {
-            fileResults.push(file)
+         // Check if file is too big
+         if (file.size > maxFileSize) {
+            handleError({
+               code: 2,
+               message: `${file.name} is too large`
+            }, file)
+
+            break
          }
+
+         // Check if file is too small
+         if (file.size < minFileSize) {
+            handleError({
+               code: 3,
+               message: `${file.name} is too small`
+            }, file)
+
+            break
+         }
+
+         // Ensure acceptable file type
+         if (!fileTypeAcceptable(accepts, file)) {
+            handleError({
+               code: 1,
+               message: `${file.name} is not a valid file type`
+            }, file)
+
+            break
+         }
+
+         fileResults.push(file)
       }
 
       onChange(fileResults)
@@ -237,6 +185,8 @@ Files.propTypes = {
    minFileSize: PropTypes.number,
    name: PropTypes.string,
    onChange: PropTypes.func,
+   onDragEnter: PropTypes.func,
+   onDragLeave: PropTypes.func,
    onError: PropTypes.func,
    style: PropTypes.object
 }
@@ -252,6 +202,8 @@ Files.defaultProps = {
    minFileSize: 0,
    name: 'file',
    onChange: files => console.log(files), // eslint-disable-line no-console
+   onDragEnter: undefined,
+   onDragLeave: undefined,
    onError: err => console.log(`error code ${err.code}: ${err.message}`) // eslint-disable-line no-console
 }
 

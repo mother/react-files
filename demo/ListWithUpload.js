@@ -24,7 +24,7 @@ const ListWithUpload = () => {
          formData.append(file.id, new Blob([file], { type: file.type }), file.name || 'file')
       })
 
-      axios.post(`/files`, formData).then(() => {
+      axios.post('/files', formData).then(() => {
          window.alert(`${files.length} files uploaded succesfully!`)
          setFiles([])
       }).catch((err) => {
@@ -53,9 +53,9 @@ const ListWithUpload = () => {
             <div className="files-list">
                <ul>
                   {files.map(file => (
-                     <li className="files-list-item" key={file.id}>
+                     <li key={file.id} className="files-list-item">
                         <div className="files-list-item-preview">
-                           {file.preview.type === "image"
+                           {file.preview.type === 'image'
                               ? <img className="files-list-item-preview-image" src={file.preview.url} />
                               : <div className="files-list-item-preview-extension">{file.extension}</div>}
                         </div>
