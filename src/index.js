@@ -214,7 +214,8 @@ class Files extends React.Component {
       ref: (element) => {
         this.inputElement = element
       },
-      onChange: this.onDrop
+      onChange: this.onDrop,
+      disabled: this.props.disabled
     }
 
     return (
@@ -258,6 +259,7 @@ Files.propTypes = {
   maxFileSize: PropTypes.number,
   minFileSize: PropTypes.number,
   clickable: PropTypes.bool,
+  disabled: PropTypes.bool,
   name: PropTypes.string,
   style: PropTypes.object
 }
@@ -277,7 +279,8 @@ Files.defaultProps = {
   maxFileSize: Infinity,
   minFileSize: 0,
   name: 'file',
-  clickable: true
+  clickable: true,
+  disabled: false
 }
 
 export default Files
