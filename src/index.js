@@ -11,15 +11,16 @@ const Files = ({
    clickable,
    dragActiveClassName,
    dragActiveStyle,
-   onChange,
-   onDragEnter,
-   onDragLeave,
-   onError,
+   inputProps,
    multiple,
    maxFiles,
    maxFileSize,
    minFileSize,
    name,
+   onChange,
+   onDragEnter,
+   onDragLeave,
+   onError,
    style
 }) => {
    const idCounter = useRef(1)
@@ -161,6 +162,7 @@ const Files = ({
    return (
       <>
          <input
+            {...inputProps}
             ref={inputElement}
             type="file"
             accept={accepts ? accepts.join() : ''}
@@ -195,6 +197,7 @@ Files.propTypes = {
    className: PropTypes.string,
    clickable: PropTypes.bool,
    dragActiveClassName: PropTypes.string,
+   inputProps: PropTypes.object,
    multiple: PropTypes.bool,
    maxFiles: PropTypes.number,
    maxFileSize: PropTypes.number,
@@ -212,6 +215,7 @@ Files.defaultProps = {
    className: undefined,
    clickable: true,
    dragActiveClassName: undefined,
+   inputProps: {},
    multiple: true,
    maxFiles: Infinity,
    maxFileSize: Infinity,
