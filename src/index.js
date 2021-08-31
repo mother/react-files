@@ -45,12 +45,17 @@ class Files extends React.Component {
       // Tell file it's own readable size
       file.sizeReadable = this.fileSizeReadable(file.size)
 
-      // Add preview, either image or file extension
+      // Add preview for image, PDF or other file extensions
       if (file.type && this.mimeTypeLeft(file.type) === 'image') {
         file.preview = {
           type: 'image',
           url: window.URL.createObjectURL(file)
         }
+      } else if (file.type && this.mimeTypeRight(file.type) === 'pdf') {
+        file.preview = {
+          type: 'application/pdf',
+          url: window.URL.createObjectURL(file)
+        }         
       } else {
         file.preview = {
           type: 'file'
