@@ -221,6 +221,7 @@ class Files extends React.Component {
       <div>
         <input
           {...inputAttributes}
+          id={this.props.id || ''}
         />
         <div
           className={this.props.className}
