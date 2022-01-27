@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const mimeTypeRegexp = /^(application|audio|example|image|message|model|multipart|text|video)\/[a-z0-9\.\+\*-]+$/;
-const extRegexp = /\.[a-zA-Z0-9]*$/;
+const mimeTypeRegexp = /^(application|audio|example|image|message|model|multipart|text|video)\/[a-z0-9\.\+\*-]+$/
+const extRegexp = /\.[a-zA-Z0-9]*$/
 
 class Files extends React.Component {
   constructor (props, context) {
@@ -101,7 +101,7 @@ class Files extends React.Component {
   }
 
   fileTypeAcceptable (file) {
-    let accepts = this.props.accepts;
+    let accepts = this.props.accepts
     if (!accepts) {
       return true
     }
@@ -121,11 +121,11 @@ class Files extends React.Component {
           }
         }
       } else if (file.extension && accept.match(extRegexp)) {
-        const ext = accept.substr(1);
-        return file.extension.toLowerCase() === ext.toLowerCase();
+        const ext = accept.substr(1)
+        return file.extension.toLowerCase() === ext.toLowerCase()
       }
       return false
-    });
+    })
 
     if (!result) {
       this.onError({
@@ -210,6 +210,8 @@ class Files extends React.Component {
       accept: this.props.accepts ? this.props.accepts.join() : '',
       multiple: this.props.multiple,
       name: this.props.name,
+      id: this.props.id,
+      disabled: this.props.disabled,
       style: { display: 'none' },
       ref: (element) => {
         this.inputElement = element
@@ -221,7 +223,6 @@ class Files extends React.Component {
       <div>
         <input
           {...inputAttributes}
-          id={this.props.id || ''}
         />
         <div
           className={this.props.className}
@@ -230,10 +231,10 @@ class Files extends React.Component {
               ? this.openFileChooser
               : null
           }
-          onDrop={this.onDrop}
-          onDragOver={this.onDragOver}
-          onDragEnter={this.onDragEnter}
-          onDragLeave={this.onDragLeave}
+          onDrop={inputAttributes.disabled ? () => {} : this.onDrop}
+          onDragOver={inputAttributes.disabled ? () => {} : this.onDragOver}
+          onDragEnter={inputAttributes.disabled ? () => {} : this.onDragEnter}
+          onDragLeave={inputAttributes.disabled ? () => {} : this.onDragLeave}
           ref={dropzone => { this.dropzone = dropzone }}
           style={this.props.style}
         >
@@ -260,7 +261,9 @@ Files.propTypes = {
   minFileSize: PropTypes.number,
   clickable: PropTypes.bool,
   name: PropTypes.string,
-  style: PropTypes.object
+  style: PropTypes.object,
+  id: PropTypes.string,
+  disabled: PropTypes.bool
 }
 
 Files.defaultProps = {
@@ -278,7 +281,9 @@ Files.defaultProps = {
   maxFileSize: Infinity,
   minFileSize: 0,
   name: 'file',
-  clickable: true
+  clickable: true,
+  id: 'file',
+  disabled: false
 }
 
 export default Files

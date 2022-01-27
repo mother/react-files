@@ -86,6 +86,23 @@ npm run build
 
 ## Props
 
+
+`id` - *String*
+
+Default: `file`
+
+id to the input file
+
+---
+
+`disabled` - *Boolean*
+
+Default: `false`
+
+boolean for disabled input
+
+---
+
 `onChange(files)` - *Function*
 
 Perform work on files added when submit is clicked.
