@@ -1,13 +1,15 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import ListWithUploadExample from './ListWithUpload'
 import GalleryExample from './Gallery'
 import RenderPropsExample from './RenderProps'
 
-ReactDOM.render((
+const container = document.getElementById('container')
+const root = createRoot(container)
+root.render(
    <div>
       <ListWithUploadExample />
       <GalleryExample />
       <RenderPropsExample />
    </div>
-), document.getElementById('container'))
+)
