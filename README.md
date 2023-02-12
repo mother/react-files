@@ -1,13 +1,15 @@
 React Files
 =======================
 
-A minimal, zero dependency, file input (dropzone) component for React
+A minimal, zero dependency, file input (dropzone) component for React.
+
+If upgrading from version 1 or 2, see the [Upgrading to Version 3](#upgrading-to-version-3) section below.
 
 ![Alt text](/demo.gif?raw=true "Demo")
 
 ## Installation
 
-Install from npm or yarn. Requires React 16.8+.
+Install using npm or yarn. Requires React 16.8+.
 
 ```bash
 npm install react-files --save
@@ -45,6 +47,15 @@ const FileDropzone = () => {
   )
 }
 ```
+
+## Upgrading to Version 3
+
+Most of the changes made to version 3 are internal, but there are some notable and breaking changes:
+1. The most significant change is that `react-files` no longer manages state internally to track files that have been uploaded to a file list. This can be achieved quite simply however - please refer to the [`ListWithUpload` example](https://github.com/mother/react-files/blob/master/src/examples/ListWithUpload.js).
+2. No more default values for `className` or `dragActiveClassName` props.
+3. Ability to pass in a render prop with a prop that indicates whether a drag is in progress. See the [`RenderProps` example](https://github.com/mother/react-files/blob/master/src/examples/RenderProps.js).
+
+For a full list of changes, please checkout the [V3 PR](https://github.com/mother/react-files/pull/24).
 
 ## Props
 
@@ -129,15 +140,15 @@ Class added to the Files component when user is actively hovering over the dropz
 
 ## Examples
 
+To run the examples locally, clone and install peer dependencies (React 16.8+)
+
 ```
 git clone https://github.com/mother/react-files
 npm install
+npm i react react-dom
 ```
-And since React is just a peer dependency:
-```
-npm install react
-```
-Then:
+
+Then run the examples server:
 ```
 npm run examples
 ```
