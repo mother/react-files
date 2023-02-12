@@ -139,7 +139,7 @@ npm install react
 ```
 Then:
 ```
-npm run demo
+npm run examples
 ```
 
 Then visit http://localhost:8080/

@@ -5,7 +5,7 @@
   "description": "A file input (dropzone) management component for React",
   "scripts": {
     "build": "rm -rf dist && webpack --config config/webpack.build.config.js",
-    "demo": "node demo/server.js",
+    "examples": "node examples/server.js",
     "lint": "git diff HEAD --name-only --diff-filter=ACM | grep '.js$' | xargs node ./node_modules/eslint/bin/eslint.js --quiet",
     "lint-full": "node ./node_modules/eslint/bin/eslint.js .",
     "webpack-analyze": "mkdir -p .tmp; NODE_ENV=production webpack --config config/webpack.build.config.js --profile --json > .tmp/stats.json; webpack-bundle-analyzer .tmp/stats.json"
