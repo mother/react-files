@@ -1,86 +1,49 @@
-react-files
+React Files
 =======================
 
-> A file input (dropzone) management component for React
-
-## Demo
+A minimal, zero dependency, file input (dropzone) component for React
 
 ![Alt text](/demo.gif?raw=true "Demo")
 
 ## Installation
 
-Install from NPM and include it in your own React build process (using [Browserify](http://browserify.org), [Webpack](http://webpack.github.io/), etc).
+Install from npm or yarn. Requires React 16.8+.
 
 ```bash
 npm install react-files --save
 ```
 
-## Usage
-
-#### Basic
+## Basic Usage
 
 ```js
 import React from 'react'
-import ReactDOM from 'react-dom'
 import Files from 'react-files'
 
-var FilesDemo = React.createClass({
-  onFilesChange: function (files) {
+const FileDropzone = () => {
+  const handleChange = (files) => {
     console.log(files)
-  },
-
-  onFilesError: function (error, file) {
-    console.log('error code ' + error.code + ': ' + error.message)
-  },
-
-  render: function() {
-    return (
-      <div className="files">
-        <Files
-          className='files-dropzone'
-          onChange={this.onFilesChange}
-          onError={this.onFilesError}
-          accepts={['image/png', '.pdf', 'audio/*']}
-          multiple
-          maxFileSize={10000000}
-          minFileSize={0}
-          clickable
-        >
-          Drop files here or click to upload
-        </Files>
-      </div>
-    )
   }
-})
 
-ReactDOM.render(<FilesDemo />, document.getElementById('container'))
-```
+  const handleError = (error, file) => {
+    console.log('error code ' + error.code + ': ' + error.message)
+  }
 
-#### Advanced
-
-See "Tinker" instructions below to run and view all examples.
-
-### Tinker
-
-```
-git clone https://github.com/mother/react-files
-npm install
-```
-And since React is just a peer dependency:
-```
-npm install react
-```
-Then:
-```
-npm run demo
-```
-
-Then visit http://localhost:8080/
-
-### Build
-
-```
-npm run build
+  return (
+    <div className="files">
+      <Files
+        className='files-dropzone'
+        onChange={handleChange}
+        onError={handleError}
+        accepts={['image/png', '.pdf', 'audio/*']}
+        multiple
+        maxFileSize={10000000}
+        minFileSize={0}
+        clickable>
+        Drop files here or click to upload
+      </Files>
+    </div>
+  )
+}
 ```
 
 ## Props
@@ -160,18 +123,27 @@ Minimum file size allowed (in bytes)
 
 `dragActiveClassName` - *String*
 
-Default: `'files-dropzone-active'`
-
 Class added to the Files component when user is actively hovering over the dropzone with files selected.
 
 ---
 
-### Test (todo)
+## Examples
 
 ```
-npm test
+git clone https://github.com/mother/react-files
+npm install
+```
+And since React is just a peer dependency:
+```
+npm install react
+```
+Then:
+```
+npm run demo
 ```
 
-### License
+Then visit http://localhost:8080/
 
-MIT. Copyright (c) Mother Co. 2020
+## License
+
+MIT. Copyright (c) Mother Co. 2023
