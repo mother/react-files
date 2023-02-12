@@ -1,88 +1,62 @@
-react-files
+React Files
 =======================
 
-> A file input (dropzone) management component for React
+A minimal, zero dependency, file input (dropzone) component for React.
 
-## Demo
+If upgrading from version 1 or 2, see the [Upgrading to Version 3](#upgrading-to-version-3) section below.
 
 ![Alt text](/demo.gif?raw=true "Demo")
 
 ## Installation
 
-Install from NPM and include it in your own React build process (using [Browserify](http://browserify.org), [Webpack](http://webpack.github.io/), etc).
+Install using npm or yarn. Requires React 16.8+.
 
 ```bash
 npm install react-files --save
 ```
 
-## Usage
-
-#### Basic
+## Basic Usage
 
 ```js
 import React from 'react'
-import ReactDOM from 'react-dom'
 import Files from 'react-files'
 
-var FilesDemo = React.createClass({
-  onFilesChange: function (files) {
+const FileDropzone = () => {
+  const handleChange = (files) => {
     console.log(files)
-  },
-
-  onFilesError: function (error, file) {
-    console.log('error code ' + error.code + ': ' + error.message)
-  },
-
-  render: function() {
-    return (
-      <div className="files">
-        <Files
-          className='files-dropzone'
-          onChange={this.onFilesChange}
-          onError={this.onFilesError}
-          accepts={['image/png', '.pdf', 'audio/*']}
-          multiple
-          maxFiles={3}
-          maxFileSize={10000000}
-          minFileSize={0}
-          clickable
-        >
-          Drop files here or click to upload
-        </Files>
-      </div>
-    )
   }
-})
 
-ReactDOM.render(<FilesDemo />, document.getElementById('container'))
+  const handleError = (error, file) => {
+    console.log('error code ' + error.code + ': ' + error.message)
+  }
+
+  return (
+    <div className="files">
+      <Files
+        className='files-dropzone'
+        onChange={handleChange}
+        onError={handleError}
+        accepts={['image/png', '.pdf', 'audio/*']}
+        multiple
+        maxFileSize={10000000}
+        minFileSize={0}
+        clickable>
+        Drop files here or click to upload
+      </Files>
+    </div>
+  )
+}
 ```
 
-#### Advanced
+## Upgrading to Version 3
 
-See "Tinker" instructions below to run and view all examples.
+Most of the changes made to version 3 are internal, but there are some notable and breaking changes:
+1. The most significant change is that `react-files` no longer manages state internally to track files that have been uploaded to a file list. This can be achieved quite simply however - please refer to the [`ListWithUpload` example](https://github.com/mother/react-files/blob/master/src/examples/ListWithUpload.js).
+2. `dropActiveClassName` prop has been renamed to `dragActiveClassName`.
+2. Removed unnecessary parent/wrapper `div` element. No more default values for `className` or `dragActiveClassName` props.
+3. Ability to pass in a render prop with a prop that indicates whether a drag is in progress. See the [`RenderProps` example](https://github.com/mother/react-files/blob/master/src/examples/RenderProps.js).
 
-### Tinker
-
-```
-git clone https://github.com/mother/react-files
-npm install
-```
-And since React is just a peer dependency:
-```
-npm install react
-```
-Then:
-```
-npm run dev
-```
-
-Then visit http://localhost:8080/
-
-### Build
-
-```
-npm run build
-```
+For a full list of changes, please checkout the [V3 PR](https://github.com/mother/react-files/pull/24).
 
 ## Props
 
@@ -159,20 +133,29 @@ Minimum file size allowed (in bytes)
 
 ---
 
-`dropActiveClassName` - *String*
-
-Default: `'files-dropzone-active'`
+`dragActiveClassName` - *String*
 
 Class added to the Files component when user is actively hovering over the dropzone with files selected.
 
 ---
 
-### Test (todo)
+## Examples
+
+To run the examples locally, clone and install peer dependencies (React 16.8+)
 
 ```
-npm test
+git clone https://github.com/mother/react-files
+npm install
+npm i react react-dom
 ```
 
-### License
+Then run the examples server:
+```
+npm run examples
+```
 
-MIT. Copyright (c) 2016 Jared Reich.
+Then visit http://localhost:8080/
+
+## License
+
+MIT. Copyright (c) Mother Co. 2023
