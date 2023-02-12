@@ -51,12 +51,13 @@ const FileDropzone = () => {
 ## Upgrading to Version 3
 
 Most of the changes made to version 3 are internal, but there are some notable and breaking changes:
-1. The most significant change is that `react-files` no longer manages state internally to track files that have been uploaded to a file list. This can be achieved quite simply however - please refer to the [`ListWithUpload` example](https://github.com/mother/react-files/blob/master/src/examples/ListWithUpload.js).
+1. The most significant change is that `react-files` no longer manages state internally to track files that have been uploaded to a file list. This can be achieved quite simply however - please refer to the [`ListWithUpload` example](https://github.com/mother/react-files/blob/master/examples/ListWithUpload.js).
 2. `dropActiveClassName` prop has been renamed to `dragActiveClassName`.
 2. Removed unnecessary parent/wrapper `div` element. No more default values for `className` or `dragActiveClassName` props.
-3. Ability to pass in a render prop with a prop that indicates whether a drag is in progress. See the [`RenderProps` example](https://github.com/mother/react-files/blob/master/src/examples/RenderProps.js).
+3. Ability to pass in a render prop with a prop that indicates whether a drag is in progress. See the [`RenderProps` example](https://github.com/mother/react-files/blob/master/examples/RenderProps.js).
+4. Ability to pass in attributes to underlying input (fixes #35, #39)
 
-For a full list of changes, please checkout the [V3 PR](https://github.com/mother/react-files/pull/24).
+For a full list of changes, please checkout the [v3.0.0 release changelog](https://github.com/mother/react-files/releases/tag/v3.0.0) or the [corresponding pull request](https://github.com/mother/react-files/pull/24).
 
 ## Props
 
