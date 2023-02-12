@@ -55,7 +55,7 @@ Most of the changes made to version 3 are internal, but there are some notable a
 2. `dropActiveClassName` prop has been renamed to `dragActiveClassName`.
 2. Removed unnecessary parent/wrapper `div` element. No more default values for `className` or `dragActiveClassName` props.
 3. Ability to pass in a render prop with a prop that indicates whether a drag is in progress. See the [`RenderProps` example](https://github.com/mother/react-files/blob/master/examples/RenderProps.js).
-4. Ability to pass in attributes to underlying input (fixes #35, #39)
+4. Ability to pass in attributes to underlying input
 
 For a full list of changes, please checkout the [v3.0.0 release changelog](https://github.com/mother/react-files/releases/tag/v3.0.0) or the [corresponding pull request](https://github.com/mother/react-files/pull/24).
 
