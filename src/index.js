@@ -5,22 +5,21 @@ import fileSizeReadable from './utils/fileSizeReadable'
 import fileTypeAcceptable from './utils/fileTypeAcceptable'
 
 const Files = ({
-   accepts,
+   accepts = null,
    children,
    className,
-   clickable,
+   clickable = true,
    dragActiveClassName,
-   dragActiveStyle,
-   inputProps,
-   multiple,
-   maxFiles,
-   maxFileSize,
-   minFileSize,
-   name,
-   onChange,
+   inputProps = {},
+   multiple = true,
+   maxFiles = Infinity,
+   maxFileSize = Infinity,
+   minFileSize = 0,
+   name = 'file',
+   onChange = files => console.log(files),
    onDragEnter,
    onDragLeave,
-   onError,
+   onError = err => console.log(`error code ${err.code}: ${err.message}`),
    style
 }) => {
    const idCounter = useRef(1)
@@ -208,23 +207,6 @@ Files.propTypes = {
    onDragLeave: PropTypes.func,
    onError: PropTypes.func,
    style: PropTypes.object
-}
-
-Files.defaultProps = {
-   accepts: null,
-   className: undefined,
-   clickable: true,
-   dragActiveClassName: undefined,
-   inputProps: {},
-   multiple: true,
-   maxFiles: Infinity,
-   maxFileSize: Infinity,
-   minFileSize: 0,
-   name: 'file',
-   onChange: files => console.log(files), // eslint-disable-line no-console
-   onDragEnter: undefined,
-   onDragLeave: undefined,
-   onError: err => console.log(`error code ${err.code}: ${err.message}`) // eslint-disable-line no-console
 }
 
 export default Files
