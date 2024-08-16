@@ -16,10 +16,10 @@ const Files = ({
    maxFileSize = Infinity,
    minFileSize = 0,
    name = 'file',
-   onChange = files => console.log(files),
+   onChange = files => console.log(files), // eslint-disable-line no-console
    onDragEnter,
    onDragLeave,
-   onError = err => console.log(`error code ${err.code}: ${err.message}`),
+   onError = err => console.log(`error code ${err.code}: ${err.message}`), // eslint-disable-line no-console
    style
 }) => {
    const idCounter = useRef(1)
