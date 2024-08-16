@@ -140,6 +140,14 @@ Class added to the Files component when user is actively hovering over the dropz
 
 ---
 
+`inputProps` - *Object*
+
+Default: `{}`
+
+Inject properties directly into the underlying HTML `file` input. Useful for setting `required` or overriding the `style` attributes.
+
+---
+
 ## Examples
 
 To run the examples locally, clone and install peer dependencies (React 16.8+)

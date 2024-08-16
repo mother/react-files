@@ -16,10 +16,10 @@ const Files = ({
    maxFileSize = Infinity,
    minFileSize = 0,
    name = 'file',
-   onChange = files => console.log(files),
+   onChange = files => console.log(files), // eslint-disable-line no-console
    onDragEnter,
    onDragLeave,
-   onError = err => console.log(`error code ${err.code}: ${err.message}`),
+   onError = err => console.log(`error code ${err.code}: ${err.message}`), // eslint-disable-line no-console
    style
 }) => {
    const idCounter = useRef(1)
@@ -161,13 +161,13 @@ const Files = ({
    return (
       <>
          <input
+            accept={accepts ? accepts.join() : ''}
+            style={{ display: 'none' }}
             {...inputProps}
             ref={inputElement}
             type="file"
-            accept={accepts ? accepts.join() : ''}
             multiple={multiple}
             name={name}
-            style={{ display: 'none' }}
             onChange={handleDrop}
          />
          {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
