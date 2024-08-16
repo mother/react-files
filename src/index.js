@@ -161,13 +161,13 @@ const Files = ({
    return (
       <>
          <input
+            accept={accepts ? accepts.join() : ''}
+            style={{ display: 'none' }}
             {...inputProps}
             ref={inputElement}
             type="file"
-            accept={accepts ? accepts.join() : ''}
             multiple={multiple}
             name={name}
-            style={{ display: 'none' }}
             onChange={handleDrop}
          />
          {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
